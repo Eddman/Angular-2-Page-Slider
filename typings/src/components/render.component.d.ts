@@ -1,5 +1,5 @@
-import { EventEmitter, ViewContainerRef, TemplateRef } from '@angular/core';
-import { StackLocation } from "../types";
+import { EventEmitter, TemplateRef, ViewContainerRef } from '@angular/core';
+import { StackLocation } from '../types';
 export declare class KBPage {
     $implicit: any;
     index: number;
@@ -27,13 +27,13 @@ export declare class KBPagesRendererDirective {
     private pageHeight;
     Resize(width: number, height: number): void;
     private views;
-    private CreateDOM();
-    private ClearDOM();
-    private BuildPage(pageNumber, loc);
+    private CreateDOM;
+    private ClearDOM;
+    private BuildPage;
     protected StyleAsPage(pageElement: HTMLElement): void;
     protected StyleAtStackLocation(pageElement: HTMLElement, loc: StackLocation): void;
-    private ChangeStackLocationOfView(curr, to);
-    private ChangePage(newPage, oldPage);
-    private GoToNextPage();
-    private GoToPreviousPage();
+    private ChangeStackLocationOfView;
+    private ChangePage;
+    private GoToNextPage;
+    private GoToPreviousPage;
 }

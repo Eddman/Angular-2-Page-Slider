@@ -2,18 +2,18 @@
  * When the user clicks very close to the edge of a page, move in that direction.
  */
 
-import { PageSliderControlAPI } from "../types";
+import {PageSliderControlAPI} from '../types';
 
 export class SideClickHandler {
 	constructor(
-		private delegate : PageSliderControlAPI,
-		private element : HTMLElement
+		private delegate: PageSliderControlAPI,
+		private element: HTMLElement
 	) {
-		element.addEventListener("click",  this.ClickHandler.bind(this));
+		element.addEventListener('click', this.ClickHandler.bind(this));
 	}
 
-	public enabled : boolean = true;
-	public threshold : number = 20; // 20px from the edge of the screen
+	public enabled: boolean = true;
+	public threshold: number = 20; // 20px from the edge of the screen
 
 	private ClickHandler(e: MouseEvent) {
 		if (!this.enabled) return;

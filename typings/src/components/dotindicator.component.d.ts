@@ -7,6 +7,6 @@ export declare class KBDotIndicatorComponent {
     items: {
         active: boolean;
     }[];
-    private updateItems();
-    private updateSelected();
+    private updateItems;
+    private updateSelected;
 }

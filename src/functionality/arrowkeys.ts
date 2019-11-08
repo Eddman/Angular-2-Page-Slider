@@ -2,16 +2,16 @@
  * When the user clicks very close to the edge of a page, move in that direction.
  */
 
-import { PageSliderControlAPI } from "../types";
+import {PageSliderControlAPI} from '../types';
 
 export class ArrowKeysHandler {
 	constructor(
-		private delegate : PageSliderControlAPI
+		private delegate: PageSliderControlAPI
 	) {
-		document.addEventListener("keydown",  this.KeyHandler.bind(this));
+		document.addEventListener('keydown', this.KeyHandler.bind(this));
 	}
 
-	public enabled : boolean = true;
+	public enabled: boolean = true;
 
 	private KeyHandler(e: KeyboardEvent) {
 		if (!this.enabled) return;

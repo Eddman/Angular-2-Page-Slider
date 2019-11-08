@@ -1,4 +1,4 @@
-import { PageSliderControlAPI } from "../types";
+import { PageSliderControlAPI } from '../types';
 export declare class TouchEventHandler {
     private delegate;
     constructor(delegate: PageSliderControlAPI, element: HTMLElement);
@@ -12,10 +12,10 @@ export declare class TouchEventHandler {
     times_x: number[];
     last_sample_time: number;
     diffs_index: number;
-    private CaptureXDiff(diff);
+    private CaptureXDiff;
     private readonly momentum_x;
     TouchStart(event: TouchEvent): void;
     TouchMove(event: TouchEvent): void;
     TouchEnd(event: TouchEvent): void;
-    private GetTrackingTouch(list);
+    private GetTrackingTouch;
 }

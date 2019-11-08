@@ -3,7 +3,7 @@
 	based on momentum and distance to travel.
 */
 
-const kEasingFunction = "cubic-bezier(.35,.45,.5,1)";
+const kEasingFunction = 'cubic-bezier(.35,.45,.5,1)';
 const kEasingStartSlope = 1.33;
 const kDefaultDuration = 250;
 const kMinDuration = 60;
@@ -12,8 +12,9 @@ const kMaxDuration = 660;
 export class SlideAnimation {
 
 	// Pseudo-promise
-	private on_complete : Array<()=>void> = [];
-	public then(on_complete : ()=>void) {
+	private on_complete: Array<() => void> = [];
+
+	public then(on_complete: () => void) {
 		this.on_complete.push(on_complete);
 		return this;
 	}
@@ -21,13 +22,13 @@ export class SlideAnimation {
 	// The real meat of the animation code
 	// Hard-coded to the 'left' property because that's all we use here
 	// but certainly this code could be generalized if needed.
-	constructor (
-		element : HTMLElement,
-		private current_px : number,
-		private dest_px : number,
-		private momentum_px : number,
-		private default_duration? : number
-	){
+	constructor(
+		element: HTMLElement,
+		private current_px: number,
+		private dest_px: number,
+		private momentum_px: number,
+		private default_duration?: number
+	) {
 		if (default_duration === undefined) {
 			this.default_duration = kDefaultDuration;
 		}
@@ -39,17 +40,17 @@ export class SlideAnimation {
 		element.style.webkitTransition = tProperty;
 
 		// Wait for that to propogate
-		setTimeout(()=>{
+		setTimeout(() => {
 
 			// Move to the destination location
-			element.style.left = dest_px + "px";
+			element.style.left = dest_px + 'px';
 
 			// Wait for that to finish and clean it up
-			setTimeout(()=>{
+			setTimeout(() => {
 				for (let f of this.on_complete) f();
 
-				element.style.transition = "";
-				element.style.webkitTransition = "";
+				element.style.transition = '';
+				element.style.webkitTransition = '';
 			}, duration + 10);
 
 		}, 10);
@@ -71,7 +72,7 @@ export class SlideAnimation {
 			let estimate = linear_duration * kEasingStartSlope;
 			return Math.max(Math.min(estimate, kMaxDuration), kMinDuration);
 
-		// Otherwise, throw it out and use our default duration
+			// Otherwise, throw it out and use our default duration
 		} else {
 			return this.default_duration;
 		}

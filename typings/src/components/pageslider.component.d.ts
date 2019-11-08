@@ -1,9 +1,9 @@
-export { KBPagesRendererDirective, KBPage } from "./render.component";
-import { EventEmitter, ElementRef, QueryList } from '@angular/core';
-import { KBPagesRendererDirective } from "./render.component";
+export { KBPagesRendererDirective, KBPage } from './render.component';
+import { ElementRef, EventEmitter, QueryList } from '@angular/core';
+import { SlideAnimation } from '../functionality/animation';
+import { PageSliderControlAPI } from '../types';
 import { KBNavButtonComponent } from './navbutton.component';
-import { PageSliderControlAPI } from "../types";
-import { SlideAnimation } from "../functionality/animation";
+import { KBPagesRendererDirective } from './render.component';
 export declare class KBPageSliderComponent implements PageSliderControlAPI {
     private element;
     private innerContainer;

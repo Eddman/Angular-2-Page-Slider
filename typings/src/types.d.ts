@@ -1,7 +1,7 @@
 export declare enum StackLocation {
     Previous = 0,
     Current = 1,
-    Next = 2,
+    Next = 2
 }
 export interface PageSliderControlAPI {
     ScrollTo(x: number): void;

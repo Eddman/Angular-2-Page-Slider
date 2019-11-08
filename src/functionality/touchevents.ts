@@ -1,7 +1,7 @@
 // INTERACTIVITY - TOUCH EVENTS =============================================================
 // Handles HTML touch events and formats it nicely for
 
-import { PageSliderControlAPI } from "../types";
+import {PageSliderControlAPI} from '../types';
 
 // Snap back if user has moved less than 10% of the page
 const kDistanceThreshold = 0.1;
@@ -20,33 +20,34 @@ const kRejectAtY = 20;
 
 export class TouchEventHandler {
 	constructor(
-		private delegate : PageSliderControlAPI,
-		element : HTMLElement
+		private delegate: PageSliderControlAPI,
+		element: HTMLElement
 	) {
 
 		// Add touch event listeners
-		element.addEventListener("touchstart",  this.TouchStart.bind(this));
-		element.addEventListener("touchmove",   this.TouchMove.bind(this));
-		element.addEventListener("touchend",    this.TouchEnd.bind(this));
-		element.addEventListener("touchcancel", this.TouchEnd.bind(this));
+		element.addEventListener('touchstart', this.TouchStart.bind(this));
+		element.addEventListener('touchmove', this.TouchMove.bind(this));
+		element.addEventListener('touchend', this.TouchEnd.bind(this));
+		element.addEventListener('touchcancel', this.TouchEnd.bind(this));
 	}
 
 	// Touch tracking state
-	private start_x : number = 0;
-	private current_x : number = 0;
+	private start_x: number = 0;
+	private current_x: number = 0;
 	private start_ypx: number = 0;
 
-	private current_scroll : number = 1;
-	private tracking : number = null;
-	public 	accepted : boolean = false;
+	private current_scroll: number = 1;
+	private tracking: number = null;
+	public accepted: boolean = false;
 
 
 	// MOMENTUM HIGH PASS
 
 	diffs_x = [0, 0, 0];
 	times_x = [20, 20, 20];
-	last_sample_time : number;
+	last_sample_time: number;
 	diffs_index = 0;
+
 	private CaptureXDiff(diff: number) {
 		this.diffs_x[this.diffs_index] = diff;
 
@@ -59,7 +60,7 @@ export class TouchEventHandler {
 
 	// Returns the scroll momentum in fractional page widths per second.
 	// (fpw/s * page width = px/s)
-	private get momentum_x() : number {
+	private get momentum_x(): number {
 		let acc = 0;
 		for (let i = 0; i < this.diffs_x.length; i++) {
 			acc += (this.diffs_x[i] / this.times_x[i]) * 1000 / 3;

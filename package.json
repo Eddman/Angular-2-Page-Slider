@@ -1,5 +1,5 @@
 {
-  "name": "ng2-page-slider",
+  "name": "@eddman/ng2-page-slider",
   "version": "0.10.0",
   "description": "Mimicks the functionality of UIPageViewController in pure HTML for mobile web apps with Angular 2.",
   "repository": "https://github.com/KeatonTech/Angular-2-Page-Slider",
@@ -28,30 +28,31 @@
   "author": "Keaton Brandt",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/common": ">=2.3.0  <5.0.0",
-    "@angular/compiler": ">=2.3.0  <5.0.0",
-    "@angular/core": ">=2.3.0  <5.0.0",
-    "@angular/platform-browser": ">=2.3.0  <5.0.0"
+    "@angular/common": ">=2.3.0  <9.0.0",
+    "@angular/compiler": ">=2.3.0  <9.0.0",
+    "@angular/core": ">=2.3.0  <9.0.0",
+    "@angular/platform-browser": ">=2.3.0  <9.0.0"
   },
   "devDependencies": {
-    "@angular/common": "^4.1.3",
-    "@angular/compiler": "^4.1.3",
-    "@angular/core": "^4.1.3",
-    "@angular/platform-browser": "^4.1.3",
-    "@angular/platform-browser-dynamic": "^4.1.3",
+    "@angular/common": "^8.2.13",
+    "@angular/compiler": "^8.2.13",
+    "@angular/core": "^8.2.13",
+    "@angular/platform-browser": "^8.2.13",
+    "@angular/platform-browser-dynamic": "^8.2.13",
     "systemjs": "^0.19.47",
-    "core-js": "^2.4.1",
+    "core-js": "^2.6.10",
     "reflect-metadata": "^0.1.10",
-    "rxjs": "~5.1.1",
+    "rxjs": "~6.5.3",
     "concurrently": "^3.4.0",
     "live-server": "1.2.0",
-    "zone.js": "^0.8.11",
-    "@angular/animations": "^4.1.3",
-    "@angular/compiler-cli": "^4.1.3",
-    "@angular/platform-server": "^4.1.3",
+    "zone.js": "^0.9.1",
+    "@angular/animations": "^8.2.13",
+    "@angular/compiler-cli": "^8.2.13",
+    "@angular/platform-server": "^8.2.13",
     "rollup": "^0.41.6",
     "rollup-plugin-node-resolve": "^3.0.0",
-    "typescript": "^2.3.3",
-    "@types/node": "^6.0.73"
+    "typescript": "~3.5.3",
+    "tsickle": "~0.37.1",
+    "@types/node": "^10.17.4"
   }
 }

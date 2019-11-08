@@ -14,6 +14,6 @@ export declare class KBNavButtonComponent {
     readonly derivedBackgroundColor: string;
     readonly derivedSize: string;
     readonly halfSize: string;
-    readonly symbol: string;
+    readonly symbol: "&rsaquo;" | "&lsaquo;";
     OnClick(): void;
 }

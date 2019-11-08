@@ -1,6 +1,6 @@
-import {Directive, Input, EventEmitter, ViewContainerRef, TemplateRef, EmbeddedViewRef} from '@angular/core';
+import {Directive, EmbeddedViewRef, EventEmitter, Input, TemplateRef, ViewContainerRef} from '@angular/core';
 
-import { StackLocation } from "../types";
+import {StackLocation} from '../types';
 
 
 // PAGE CLASS ===============================================================================
@@ -11,12 +11,20 @@ export class KBPage {
 		public $implicit: any,
 		public index: number,
 		private parent: KBPagesRendererDirective
-	) {};
+	) {
+	};
 
-	get isActive() {return this.parent.page == this.index};
+	get isActive() {
+		return this.parent.page == this.index;
+	};
 
-	get isFirst() {return this.index == 0;}
-	get isLast() {return this.index == this.parent.pageCount - 1;}
+	get isFirst() {
+		return this.index == 0;
+	}
+
+	get isLast() {
+		return this.index == this.parent.pageCount - 1;
+	}
 }
 
 
@@ -30,14 +38,16 @@ export class KBPagesRendererDirective {
 	constructor(
 		private viewContainer: ViewContainerRef,
 		private template: TemplateRef<KBPage>
-	) {}
+	) {
+	}
 
 
 	// LOOP TEMPLATING
 
 	// Get the input data (using loop syntax)
 	private collection: Array<any>;
-	@Input() set kbPagesOf(coll:Array<any>) {
+
+	@Input() set kbPagesOf(coll: Array<any>) {
 		this.collection = coll;
 
 		if (this.isInitialized) {
@@ -48,6 +58,7 @@ export class KBPagesRendererDirective {
 
 	// Initialization
 	private isInitialized: boolean = false;
+
 	ngOnInit() {
 		this.isInitialized = true;
 		this.CreateDOM();
@@ -57,31 +68,40 @@ export class KBPagesRendererDirective {
 	// PAGINATION
 
 	// Calculate page count from the loop
-	private _lastPageCount : number;
+	private _lastPageCount: number;
+
 	public get pageCount() {
 		let count = (this.collection) ? this.collection.length : 0;
 		if (this._lastPageCount != count) this.pageCountChange.emit(count);
 		return count;
 	}
+
 	public pageCountChange = new EventEmitter<number>();
 
 	// Page access
 	private _page: number = 0;
-	public set page(page: number) {this.SetPage(page);}
-	public SetPage(page: number) : boolean {
+	public set page(page: number) {
+		this.SetPage(page);
+	}
+
+	public SetPage(page: number): boolean {
 		if (page < 0 || page >= this.pageCount) return false;
 		let oldPage = this._page;
 		this._page = page;
 		this.ChangePage(page, oldPage);
 		return true;
 	}
-	public get page() {return this._page;}
+
+	public get page() {
+		return this._page;
+	}
 
 
 	// SIZING
 
 	private pageWidth: number = 0;
 	private pageHeight: number = 0;
+
 	public Resize(width: number, height: number) {
 		this.pageWidth = width;
 		this.pageHeight = height;
@@ -119,7 +139,7 @@ export class KBPagesRendererDirective {
 
 	private BuildPage(pageNumber: number, loc: StackLocation) {
 		if (pageNumber < 0 || pageNumber >= this.pageCount)
-			throw new Error("Attempted to create non-existent page: " + pageNumber);
+			throw new Error('Attempted to create non-existent page: ' + pageNumber);
 
 		// Create the page given the template
 		this.views[loc] = this.viewContainer.createEmbeddedView(
@@ -135,21 +155,21 @@ export class KBPagesRendererDirective {
 
 	// Styles a DOM element to be an absolute-positioned page-sized container
 	protected StyleAsPage(pageElement: HTMLElement) {
-		pageElement.style.display = "block";
-		pageElement.style.position = "absolute";
-		pageElement.style.width = this.pageWidth + "px";
-		pageElement.style.height = this.pageHeight + "px";
+		pageElement.style.display = 'block';
+		pageElement.style.position = 'absolute';
+		pageElement.style.width = this.pageWidth + 'px';
+		pageElement.style.height = this.pageHeight + 'px';
 	}
 
 	// Styles a DOM element with an X location in the container
 	protected StyleAtStackLocation(pageElement: HTMLElement, loc: StackLocation) {
 		let xLocationInContainer = loc * this.pageWidth;
-		pageElement.style.left = xLocationInContainer + "px";
+		pageElement.style.left = xLocationInContainer + 'px';
 	}
 
 	// Moves an existing page to a new stack location
 	private ChangeStackLocationOfView(curr: StackLocation, to: StackLocation) {
-		if (!this.views[curr]) throw new Error("View does not exist at location: " + curr);
+		if (!this.views[curr]) throw new Error('View does not exist at location: ' + curr);
 		for (let rootNode of this.views[curr].rootNodes) {
 			this.StyleAtStackLocation(rootNode, to);
 		}
@@ -169,7 +189,7 @@ export class KBPagesRendererDirective {
 		} else if (newPage == oldPage - 1) {
 			this.GoToPreviousPage();
 
-		// Otherwise, just rebuild the DOM around this new page
+			// Otherwise, just rebuild the DOM around this new page
 		} else {
 			this.ClearDOM();
 			this.CreateDOM();
