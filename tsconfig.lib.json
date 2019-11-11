@@ -1,0 +1,20 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "outDir": "./dist/out-tsc/lib",
+        "paths": {
+            "@eddman/ng-page-slider/*": [
+                "dist/eddman/ng-page-slider/*"
+            ]
+        },
+        "declaration": true,
+        "inlineSources": true,
+        "importHelpers": true
+    },
+    "exclude": [
+        "dist/",
+        "**/out-tsc/",
+        "**/src/test.ts",
+        "**/*.spec.ts"
+    ]
+}

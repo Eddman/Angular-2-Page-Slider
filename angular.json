@@ -1,0 +1,43 @@
+{
+    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+    "version": 1,
+    "newProjectRoot": "projects",
+    "projects": {
+        "@eddman/ng-page-slider": {
+            "root": "projects/eddman/ng-page-slider",
+            "sourceRoot": "projects/eddman/ng-page-slider/src",
+            "projectType": "library",
+            "prefix": "lib",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-ng-packagr:build",
+                    "options": {
+                        "tsConfig": "projects/eddman/ng-page-slider/tsconfig.lib.json",
+                        "project": "projects/eddman/ng-page-slider/ng-package.json"
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "projects/eddman/ng-page-slider/src/test.ts",
+                        "tsConfig": "projects/eddman/ng-page-slider/tsconfig.spec.json",
+                        "karmaConfig": "projects/eddman/ng-page-slider/karma.conf.js"
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-devkit/build-angular:tslint",
+                    "options": {
+                        "tsConfig": [
+                            "projects/eddman/ng-page-slider/tsconfig.lib.json",
+                            "projects/eddman/ng-page-slider/tsconfig.spec.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "defaultProject": "@eddman/ng-page-slider"
+}

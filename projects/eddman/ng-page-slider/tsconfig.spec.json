@@ -1,0 +1,10 @@
+{
+    "extends": "../../../tsconfig.spec.json",
+    "files": [
+        "src/test.ts",
+        "src/public_api.ts"
+    ],
+    "include": [
+        "**/*.spec.ts"
+    ]
+}

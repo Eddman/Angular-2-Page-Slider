@@ -1,0 +1,29 @@
+@import "../../globals";
+
+:host {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.kb-dot-indicator-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 3px;
+    margin: 0 2px;
+    opacity: 0.33;
+
+    transition: opacity 90ms linear;
+    -webkit-transition: opacity 90ms linear;
+}
+
+.kb-dot-indicator-dot.active {
+    opacity: 1.0;
+}

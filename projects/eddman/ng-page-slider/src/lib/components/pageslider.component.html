@@ -1,0 +1,21 @@
+<!-- Display the actual pages -->
+<div class="inner"
+     #innerContainer
+     [style.width]="containerWidth"
+     [style.height]="containerHeight">
+    <ng-content></ng-content>
+</div>
+
+<div class="buttons" *ngIf="buttons?.length > 0" [style.top]="buttonTop">
+    <!-- Display navigation buttons -->
+    <ng-content select="kb-nav-button[forward]"></ng-content>
+    <ng-content select="kb-nav-button[backward]"></ng-content>
+</div>
+
+<!-- Display the page indicator -->
+<kb-dot-indicator *ngIf="showIndicator"
+                  [page]="page"
+                  [pageCount]="pageCount"
+                  [dotColor]="dotColor"
+                  [style.bottom]="dotBottom">
+</kb-dot-indicator>

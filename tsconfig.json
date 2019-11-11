@@ -1,21 +1,44 @@
 {
-  "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "module": "es2015",
-    "emitDecoratorMetadata": false,
-    "declaration": true,
-    "declarationDir": "typings/",
-    "outDir": "dist/"
-  },
-  "files": [
-    "index.ts"
-  ],
-  "angularCompilerOptions": {
-    "annotateForClosureCompiler": true,
-    "strictMetadataEmit": true,
-    "flatModuleOutFile": "ng2-page-slider.js",
-    "flatModuleId": "ng2-page-slider",
-    "skipTemplateCodegen": true,
-    "generateCodeForLibraries": false
-  }
+    "compileOnSave": false,
+    "compilerOptions": {
+        "baseUrl": "./",
+        "outDir": "./projects/out-tsc",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "target": "es2015",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "types": [
+            "node",
+            "jasmine"
+        ],
+        "typeRoots": [
+            "node_modules/@types"
+        ],
+        "lib": [
+            "es2018",
+            "dom"
+        ],
+        "paths": {
+            "@eddman/ng-page-slider/*": [
+                "projects/eddman/ng-page-slider/*"
+            ]
+        },
+        "sourceMap": true,
+        "declaration": false,
+        "skipLibCheck": true,
+        "allowJs": false,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUnusedLocals": true,
+        "alwaysStrict": true,
+        "pretty": true,
+        "strict": true
+    },
+    "exclude": [
+        "dist/",
+        "**/out-tsc/"
+    ]
 }

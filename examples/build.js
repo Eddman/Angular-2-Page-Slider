@@ -132,7 +132,7 @@ System.register("src/components/render.component", ["@angular/core", "src/types"
                     enumerable: true,
                     configurable: true
                 });
-                KBPagesRendererDirective.prototype.SetPage = function (page) {
+                KBPagesRendererDirective.prototype.setPage = function (page) {
                     if (page < 0 || page >= this.pageCount)
                         return false;
                     var oldPage = this._page;
@@ -140,7 +140,7 @@ System.register("src/components/render.component", ["@angular/core", "src/types"
                     this.ChangePage(page, oldPage);
                     return true;
                 };
-                KBPagesRendererDirective.prototype.Resize = function (width, height) {
+                KBPagesRendererDirective.prototype.resize = function (width, height) {
                     this.pageWidth = width;
                     this.pageHeight = height;
                     if (this.isInitialized) {
@@ -897,23 +897,23 @@ System.register("src/components/pageslider.component", ["src/components/render.c
                         _this.pageCountChange.emit(count);
                     });
                     this.Resize();
-                    this.renderer.Resize(this.pageWidth, this.pageHeight);
+                    this.renderer.resize(this.pageWidth, this.pageHeight);
                     window.addEventListener('resize', function () {
                         _this.Resize();
-                        _this.renderer.Resize(_this.pageWidth, _this.pageHeight);
+                        _this.renderer.resize(_this.pageWidth, _this.pageHeight);
                         _this.pageSizeChange.emit([_this.pageWidth, _this.pageHeight]);
                     });
                 };
-                KBPageSliderComponent.prototype.Resize = function () {
+                KBPageSliderComponent.prototype.resize = function () {
                     this.innerContainer = this.element.nativeElement.querySelector('.inner');
                     this.innerContainer.style.left = -this.pageWidth + 'px';
                 };
-                KBPageSliderComponent.prototype.ScrollTo = function (x) {
+                KBPageSliderComponent.prototype.scrollTo = function (x) {
                     if (this.locked || this.blockInteraction)
                         return;
                     this.pageOffset = this.ClampX(x);
                 };
-                KBPageSliderComponent.prototype.AnimateToNextPage = function (momentum) {
+                KBPageSliderComponent.prototype.animateToNextPage = function (momentum) {
                     var _this = this;
                     if (this.locked || this.blockInteraction)
                         return null;
@@ -930,7 +930,7 @@ System.register("src/components/pageslider.component", ["src/components/render.c
                         _this.pageOffset = 1;
                     });
                 };
-                KBPageSliderComponent.prototype.AnimateToPreviousPage = function (momentum) {
+                KBPageSliderComponent.prototype.animateToPreviousPage = function (momentum) {
                     var _this = this;
                     if (this.locked || this.blockInteraction)
                         return null;
@@ -947,7 +947,7 @@ System.register("src/components/pageslider.component", ["src/components/render.c
                         _this.pageOffset = 1;
                     });
                 };
-                KBPageSliderComponent.prototype.AnimateToX = function (x, momentum) {
+                KBPageSliderComponent.prototype.animateToX = function (x, momentum) {
                     var _this = this;
                     if (this.locked || this.blockInteraction)
                         return null;
@@ -962,15 +962,15 @@ System.register("src/components/pageslider.component", ["src/components/render.c
                         _this.blockInteraction = false;
                     });
                 };
-                KBPageSliderComponent.prototype.StartScroll = function () {
+                KBPageSliderComponent.prototype.startScroll = function () {
                     this.scrollStateChange.emit(true);
                 };
-                KBPageSliderComponent.prototype.EndScroll = function () {
+                KBPageSliderComponent.prototype.endScroll = function () {
                     this.scrollStateChange.emit(false);
                 };
                 // OVERSCROLL (iOS STYLE) ===============================================================
                 // Get X to a reasonable range, taking into account page boundaries
-                KBPageSliderComponent.prototype.ClampX = function (x) {
+                KBPageSliderComponent.prototype.clampX = function (x) {
                     if (x < 0)
                         x = 0;
                     if (x > 2)
@@ -991,7 +991,7 @@ System.register("src/components/pageslider.component", ["src/components/render.c
                     return x;
                 };
                 // Exponential ramp to simulate elastic pressure on overscrolling
-                KBPageSliderComponent.prototype.OverscrollRamp = function (input) {
+                KBPageSliderComponent.prototype.overscrollRamp = function (input) {
                     return Math.pow(input, 0.5) / 5;
                 };
                 __decorate([
@@ -1227,29 +1227,29 @@ System.register("index", ["@angular/core", "@angular/platform-browser", "src/com
             }
         ],
         execute: function () {/*
-            
+
              ANGULAR 2 PAGE SLIDER COMPONENT
              with DOM recycling and caching
              designed for mobile devices
-            
+
              Copyright (c) 2016 Keaton Brandt
-            
+
              Permission is hereby granted, free of charge, to any person obtaining a copy of this
              software and associated documentation files (the "Software"), to deal in the Software
              without restriction, including without limitation the rights to use, copy, modify, merge,
              publish, distribute, sublicense, and/or sell copies of the Software, and to permit
              persons to whom the Software is furnished to do so, subject to the following conditions:
-            
+
              The above copyright notice and this permission notice shall be included in all copies or
              substantial portions of the Software.
-            
+
              THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
              INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
              PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
              FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
              OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
              DEALINGS IN THE SOFTWARE.
-            
+
              */
             PageSliderModule = /** @class */ (function () {
                 function PageSliderModule() {
