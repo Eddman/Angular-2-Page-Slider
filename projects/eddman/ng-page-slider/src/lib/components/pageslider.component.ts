@@ -1,5 +1,6 @@
 import {
     ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     ContentChild,
     ContentChildren,
@@ -8,16 +9,17 @@ import {
     Input,
     OnDestroy,
     Output,
-    QueryList
+    QueryList,
+    ViewChild
 } from '@angular/core';
 import {takeUntil} from 'rxjs/operators';
 import {SlideAnimation} from '../functionality/animation';
 import {ArrowKeysHandler} from '../functionality/arrowkeys';
 import {SideClickHandler} from '../functionality/sideclick';
 import {TouchEventHandler} from '../functionality/touchevents';
-import {PageSliderControlAPI} from '../types';
+import {PageSliderControlAPI, SliderPage} from '../types';
 import {KBNavButtonComponent} from './navbutton.component';
-import {KBPagesRendererDirective} from './render.component';
+import {KBPagesRendererDirective} from './render.directive';
 
 @Component({
     selector           : 'kb-page-slider',
@@ -33,7 +35,7 @@ import {KBPagesRendererDirective} from './render.component';
 })
 export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
 
-    @ContentChild('innerContainer', {static: true})
+    @ViewChild('innerContainer', {static: true})
     private innerContainer: ElementRef | undefined;
 
     private readonly touchEventHandler: TouchEventHandler;
@@ -42,11 +44,10 @@ export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
 
     // Get the page renderer loop and keep its size up to date
     @ContentChild(KBPagesRendererDirective, {static: true})
-    public renderer: KBPagesRendererDirective | undefined;
+    public renderer: KBPagesRendererDirective<SliderPage> | undefined;
 
-    private _pageChange = new EventEmitter<number>();
-    private _pageSizeChange = new EventEmitter<[number, number]>();
-    private _pageCountChange = new EventEmitter<number>();
+    private readonly _pageChange = new EventEmitter<number>();
+    private readonly _pageSizeChange = new EventEmitter<[number, number]>();
 
     // Dot Indicator
     @Input()
@@ -59,27 +60,17 @@ export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
     private _locked: boolean = false;
     private _enableOverscroll: boolean = true;
 
-    private _scrollStateChange = new EventEmitter<boolean>();
+    private readonly _scrollStateChange = new EventEmitter<boolean>();
 
-    private destroyed = new EventEmitter<void>();
+    private readonly destroyed = new EventEmitter<void>();
 
     private _pageOffset: number = 1;
-
-    private firstImage: HTMLImageElement | null = null;
 
     @ContentChildren(KBNavButtonComponent)
     public buttons: QueryList<KBNavButtonComponent> | undefined;
 
-    private readonly resizeListener = (() => {
-        this.resize();
-        if (this.renderer != null) {
-            this.renderer.resize(this.pageWidth, this.pageHeight);
-        }
-        this._pageSizeChange.emit([this.pageWidth, this.pageHeight]);
-    });
-
-    public constructor(private element: ElementRef) { // ,
-        // private readonly changeDetectorRef: ChangeDetectorRef) {
+    public constructor(private readonly element: ElementRef,
+                       private readonly changeDetectorRef: ChangeDetectorRef) {
         const htmlElement = this.element.nativeElement;
 
         this.touchEventHandler = new TouchEventHandler(this, htmlElement);
@@ -138,11 +129,6 @@ export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
 
     public get pageCount() {
         return (this.renderer) ? this.renderer.pageCount : 0;
-    }
-
-    @Output()
-    public get pageCountChange(): EventEmitter<number> {
-        return this._pageCountChange;
     }
 
     // Dot Indicator
@@ -214,31 +200,8 @@ export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
     }
 
     public get pageHeight() {
-        let fullHeight = this.element.nativeElement.offsetHeight;
-        const chin = (this.showIndicator && !this.overlayIndicator) ? 20 : 0;
-        if (this.renderer == null) {
-            return fullHeight - chin;
-        }
-
-        if (!this.firstImage && this.renderer.collection) {
-            this.firstImage = new Image();
-            this.firstImage.onload = () => {
-                this.resize();
-                if (this.renderer) {
-                    this.renderer.resize(this.pageWidth, this.pageHeight);
-                }
-            };
-            this.firstImage.src = this.renderer.collection[0].url;
-        } else if (this.firstImage) {
-            if (this.firstImage.width > this.element.nativeElement.offsetWidth) {
-                this.element.nativeElement.style.height = (this.firstImage.height
-                                                           * this.element.nativeElement.offsetWidth)
-                                                          / this.firstImage.width + 'px';
-            } else {
-                this.element.nativeElement.style.height = this.firstImage.height + 'px';
-            }
-            fullHeight = this.element.nativeElement.offsetHeight;
-        }
+        const fullHeight = this.element.nativeElement.offsetHeight;
+        const chin = (this.showIndicator && !this._overlayIndicator) ? 20 : 0;
         return fullHeight - chin;
     }
 
@@ -264,14 +227,31 @@ export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
             throw new Error('No *kbPages directive found inside kb-page-slider');
         }
 
-        this.renderer.pageCountChange.pipe(
+        // Resize based on size of the first image
+        this.renderer.pagesChange.pipe(
             takeUntil(this.destroyed)
-        ).subscribe((count: number) => {
-            this._pageCountChange.emit(count);
-        });
+        ).subscribe(
+            (pages) => {
+                if (pages.length > 0) {
+                    const firstImage = new Image();
+                    firstImage.onload = () => {
+                        const chin = (this.showIndicator && !this._overlayIndicator) ? 20 : 0;
+                        if (firstImage.width > this.element.nativeElement.offsetWidth) {
+                            this.element.nativeElement.style.height =
+                                `${((firstImage.height * this.element.nativeElement.offsetWidth) / firstImage.width)
+                                   + chin}px`;
+                        } else {
+                            this.element.nativeElement.style.height = `${firstImage.height + chin}px`;
+                        }
 
-        this.resize();
-        this.renderer.resize(this.pageWidth, this.pageHeight);
+                        this.resizeListener();
+                    };
+                    firstImage.src = pages[0].url;
+                }
+            }
+        );
+
+        this.resizeListener();
         window.addEventListener('resize', this.resizeListener);
     }
 
@@ -287,10 +267,16 @@ export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
         this.destroyed.complete();
     }
 
+    private readonly resizeListener = () => this.resize();
+
     private resize() {
         if (this.innerContainer != null) {
             this.innerContainer.nativeElement.style.left = -this.pageWidth + 'px';
         }
+        if (this.renderer != null) {
+            this.renderer.resize(this.pageWidth, this.pageHeight);
+        }
+        this.changeDetectorRef.markForCheck();
     }
 
     // INTERACTIVE NAVIGATION ===============================================================
@@ -304,7 +290,7 @@ export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
         this.pageOffset = this.clampX(x);
     }
 
-    public animateToNextPage(momentum?: number): SlideAnimation | null {
+    public animateToNextPage(momentum: number = 0): SlideAnimation | null {
         if (this._locked || this.blockInteraction) {
             return null;
         }
@@ -322,9 +308,6 @@ export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
             }
             return animation;
         }
-        if (momentum == null) {
-            momentum = 0;
-        }
 
         animation = this.animateToX(2, momentum);
         if (animation != null) {
@@ -341,7 +324,7 @@ export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
         return animation;
     }
 
-    public animateToPreviousPage(momentum?: number): SlideAnimation | null {
+    public animateToPreviousPage(momentum: number = 0): SlideAnimation | null {
         if (this._locked || this.blockInteraction) {
             return null;
         }
@@ -358,10 +341,6 @@ export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
                 });
             }
             return animation;
-        }
-
-        if (momentum == null) {
-            momentum = 0;
         }
 
         animation = this.animateToX(0, momentum);
@@ -413,33 +392,34 @@ export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
 
     // Get X to a reasonable range, taking into account page boundaries
     private clampX(x: number) {
-        if (x < 0) {
-            x = 0;
+        let clampX = x;
+        if (clampX < 0) {
+            clampX = 0;
         }
-        if (x > 2) {
-            x = 2;
+        if (clampX > 2) {
+            clampX = 2;
         }
 
         // Allow some overscrolling on the first and last page
-        if (this.page === 0 && x < 1) {
+        if (this.page === 0 && clampX < 1) {
             if (this._enableOverscroll) {
-                x = 1 - this.overscrollRamp(1 - x);
+                clampX = 1 - KBPageSliderComponent.overscrollRamp(1 - clampX);
             } else {
-                x = 1;
+                clampX = 1;
             }
         }
-        if (this.renderer != null && this.page === this.renderer.pageCount - 1 && x > 1) {
+        if (this.renderer != null && this.page === this.renderer.pageCount - 1 && clampX > 1) {
             if (this._enableOverscroll) {
-                x = 1 + this.overscrollRamp(x - 1);
+                clampX = 1 + KBPageSliderComponent.overscrollRamp(clampX - 1);
             } else {
-                x = 1;
+                clampX = 1;
             }
         }
-        return x;
+        return clampX;
     }
 
     // Exponential ramp to simulate elastic pressure on overscrolling
-    private overscrollRamp(input: number): number {
+    private static overscrollRamp(input: number): number {
         return Math.pow(input, 0.5) / 5;
     }
 }

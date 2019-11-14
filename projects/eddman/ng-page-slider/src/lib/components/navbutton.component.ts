@@ -3,10 +3,10 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    ElementRef,
     EventEmitter,
     Input,
-    Output,
-    ElementRef
+    Output
 } from '@angular/core';
 
 @Component({
@@ -123,14 +123,12 @@ export class KBNavButtonComponent {
         if (this.disabled) {
             return;
         }
-        this._pageChange.emit(this._page);
         if (this.isForward) {
-
-            ++this._page;
+            this._page++;
         } else {
-            --this._page;
+            this._page--;
         }
-
+        this._pageChange.emit(this._page);
         this.changeDetectorRef.markForCheck();
     }
 }

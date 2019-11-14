@@ -1,14 +1,25 @@
-import {Directive, EmbeddedViewRef, EventEmitter, Input, TemplateRef, ViewContainerRef} from '@angular/core';
+import {
+    ChangeDetectorRef,
+    Directive,
+    EmbeddedViewRef,
+    EventEmitter,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+    TemplateRef,
+    ViewContainerRef
+} from '@angular/core';
 
 import {SliderPage, StackLocation} from '../types';
 
 // PAGE CLASS ===============================================================================
 // Stores information about each page that is accessible from the template
 
-export class KBPage {
-    public constructor(_: any,
-                       public index: number,
-                       private parent: KBPagesRendererDirective) {
+export class KBPage<T extends SliderPage> {
+    public constructor(public readonly $implicit: T,
+                       public readonly index: number,
+                       private readonly parent: KBPagesRendererDirective<T>) {
     }
 
     public get isActive() {
@@ -27,63 +38,63 @@ export class KBPage {
 // PAGE RENDERER DIRECTIVE ==================================================================
 // Similar to ngFor, but renders items as stacked full-screen pages
 
-@Directive({selector: '[kbPages]'})
-export class KBPagesRendererDirective {
+@Directive({
+    selector: '[kbPages]'
+})
+export class KBPagesRendererDirective<T extends SliderPage> implements OnInit, OnDestroy {
 
-    // Angular Injection
-    public constructor(private viewContainer: ViewContainerRef,
-                       private template: TemplateRef<KBPage>) {
-    }
-
-    // LOOP TEMPLATING
+    // Page access
+    private _page: number = 0;
 
     // Get the input data (using loop syntax)
-    public collection: SliderPage[] | undefined;
+    private _pages: T[] | undefined;
 
-    @Input()
-    public set kbPagesOf(coll: any[]) {
-        this.collection = coll;
-
-        if (this.isInitialized) {
-            this.clearDOM();
-            this.createDOM();
-        }
-    }
+    @Output()
+    public readonly pagesChange = new EventEmitter<T[]>();
 
     // Initialization
     private isInitialized: boolean = false;
+
+    // Sizing
+    private pageWidth: number = 0;
+    private pageHeight: number = 0;
+
+    // DOM views
+    private views: Array<EmbeddedViewRef<any> | null> = [null, null, null];
+
+    // Angular Injection
+    public constructor(private readonly viewContainer: ViewContainerRef,
+                       private readonly template: TemplateRef<KBPage<T>>,
+                       private readonly changeDetectorRef: ChangeDetectorRef) {
+    }
 
     public ngOnInit() {
         this.isInitialized = true;
         this.createDOM();
     }
 
-    // PAGINATION
-
-    // Calculate page count from the loop
-    private _lastPageCount: number = -1;
-
-    public get pageCount() {
-        const count = (this.collection) ? this.collection.length : 0;
-        if (this._lastPageCount !== count) {
-            this.pageCountChange.emit(count);
-        }
-        return count;
+    public ngOnDestroy(): void {
+        this.clearDOM();
     }
 
-    public pageCountChange = new EventEmitter<number>();
+    @Input()
+    public set kbPagesOf(coll: T[]) {
+        this._pages = coll;
 
-    // Page access
-    private _page: number = 0;
-
-    private setPage(page: number): boolean {
-        if (page < 0 || page >= this.pageCount) {
-            return false;
+        if (this.isInitialized) {
+            this.clearDOM();
+            this.createDOM();
         }
-        const oldPage = this._page;
-        this._page = page;
-        this.changePage(page, oldPage);
-        return true;
+
+        this.pagesChange.emit(this.pages);
+    }
+
+    public get pages(): T[] {
+        return this._pages || [];
+    }
+
+    public get pageCount() {
+        return this.pages.length;
     }
 
     public get page(): number {
@@ -91,30 +102,29 @@ export class KBPagesRendererDirective {
     }
 
     public set page(page: number) {
-        this.setPage(page);
+        if (page < 0 || page >= this.pageCount) {
+            return;
+        }
+
+        const oldPage = this._page;
+        this._page = page;
+        this.changePage(page, oldPage);
     }
-
-    // SIZING
-
-    private pageWidth: number = 0;
-    private pageHeight: number = 0;
 
     public resize(width: number, height: number) {
         this.pageWidth = width;
         this.pageHeight = height;
 
-        if (this.isInitialized) {
-            this.clearDOM();
-            this.createDOM();
-        }
+        this.restylePage(StackLocation.Previous);
+        this.restylePage(StackLocation.Current);
+        this.restylePage(StackLocation.Next);
     }
 
-    // DOM RENDERING ========================================================================
-    private views: Array<EmbeddedViewRef<any> | null> = [null, null, null];
-
-    // Renders 3 pages
+    /**
+     * Renders 3 pages.
+     */
     private createDOM() {
-        if (this.pageCount === 0 || this.collection == null) {
+        if (this.pageCount === 0 || this._pages == null) {
             return;
         }
         if (this.page > 0) {
@@ -126,7 +136,9 @@ export class KBPagesRendererDirective {
         }
     }
 
-    // Clears all pages out of the DOM, useful for re-rendering
+    /**
+     * Clears all pages out of the DOM, useful for re-rendering.
+     */
     private clearDOM() {
         for (const view of this.views) {
             if (view) {
@@ -136,30 +148,38 @@ export class KBPagesRendererDirective {
         this.views = [null, null, null];
     }
 
-    // HTML CONSTRUCTION AND MANAGEMENT
-
     private buildPage(pageNumber: number, loc: StackLocation) {
         if (pageNumber < 0 || pageNumber >= this.pageCount) {
             throw new Error('Attempted to create non-existent page: ' + pageNumber);
         }
 
-        if (this.collection == null) {
+        if (this._pages == null) {
             return;
         }
 
         // Create the page given the template
         this.views[loc] = this.viewContainer.createEmbeddedView(
             this.template,
-            new KBPage(this.collection[pageNumber], pageNumber, this));
+            new KBPage(this._pages[pageNumber], pageNumber, this));
 
         // Style the page accordingly
-        for (const rootNode of this.views[loc]!.rootNodes) {
-            this.styleAsPage(rootNode);
-            this.styleAtStackLocation(rootNode, loc);
+        this.restylePage(loc);
+
+        this.changeDetectorRef.markForCheck();
+    }
+
+    private restylePage(loc: StackLocation) {
+        if (this.views[loc] != null) {
+            for (const rootNode of this.views[loc]!.rootNodes) {
+                this.styleAsPage(rootNode);
+                this.styleAtStackLocation(rootNode, loc);
+            }
         }
     }
 
-    // Styles a DOM element to be an absolute-positioned page-sized container
+    /**
+     * Styles a DOM element to be an absolute-positioned page-sized container.
+     */
     private styleAsPage(pageElement: HTMLElement) {
         pageElement.style.display = 'block';
         pageElement.style.position = 'absolute';
@@ -173,7 +193,9 @@ export class KBPagesRendererDirective {
         pageElement.style.left = xLocationInContainer + 'px';
     }
 
-    // Moves an existing page to a new stack location
+    /**
+     * Moves an existing page to a new stack location.
+     */
     private changeStackLocationOfView(curr: StackLocation, to: StackLocation) {
         if (!this.views[curr]) {
             throw new Error('View does not exist at location: ' + curr);
@@ -185,19 +207,17 @@ export class KBPagesRendererDirective {
         this.views[curr] = null;
     }
 
-    // NAVIGATION
-
-    // Updates rendering to display a new page
+    /**
+     * Updates rendering to display a new page.
+     */
     private changePage(newPage: number, oldPage: number) {
-
         // If the page is incrementing or decrementing, we can simply shift existing views
         if (newPage === oldPage + 1) {
             this.goToNextPage();
         } else if (newPage === oldPage - 1) {
             this.goToPreviousPage();
-
-            // Otherwise, just rebuild the DOM around this new page
         } else {
+            // Otherwise, just rebuild the DOM around this new page
             this.clearDOM();
             this.createDOM();
         }

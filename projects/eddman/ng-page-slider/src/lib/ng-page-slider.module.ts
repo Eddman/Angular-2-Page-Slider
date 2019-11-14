@@ -29,7 +29,7 @@ import {NgModule} from '@angular/core';
 import {KBDotIndicatorComponent} from './components/dotindicator.component';
 import {KBNavButtonComponent} from './components/navbutton.component';
 import {KBPageSliderComponent} from './components/pageslider.component';
-import {KBPagesRendererDirective} from './components/render.component';
+import {KBPagesRendererDirective} from './components/render.directive';
 
 @NgModule({
     imports     : [

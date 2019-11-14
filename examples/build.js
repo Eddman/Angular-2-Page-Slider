@@ -99,7 +99,7 @@ System.register("src/components/render.component", ["@angular/core", "src/types"
                 }
                 Object.defineProperty(KBPagesRendererDirective.prototype, "kbPagesOf", {
                     set: function (coll) {
-                        this.collection = coll;
+                        this.pages = coll;
                         if (this.isInitialized) {
                             this.ClearDOM();
                             this.CreateDOM();
