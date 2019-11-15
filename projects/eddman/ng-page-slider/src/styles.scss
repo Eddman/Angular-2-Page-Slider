@@ -1,0 +1,23 @@
+@import "lib/components/dotindicator.component";
+@import "lib/components/navbutton.component";
+@import "lib/components/pageslider.component";
+
+$dot_color: white;
+
+$arrow_color: white;
+$arrow_background: rgba(125, 125, 125, 0.4);
+
+$arrow_size_original: 44px;
+$arrow_line_height_original: 37px;
+$dot_size_original: 6px;
+$title_size_original: 16px;
+
+$arrow_size: $arrow_size_original;
+$arrow_line_height: $arrow_line_height_original;
+$dot_size: $dot_size_original;
+$title_size: $title_size_original;
+$title_offset: $dot_size_original / 3 + $title_size_original;
+
+@include ng-dot-indicator($dot_size, $dot_color, $title_offset / 2);
+@include ng-slider-nav-button($arrow_size, $arrow_line_height, $arrow_color, $arrow_background);
+@include ng-page-slider();

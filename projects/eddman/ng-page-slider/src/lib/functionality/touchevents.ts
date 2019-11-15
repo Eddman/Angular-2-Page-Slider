@@ -1,6 +1,7 @@
 // INTERACTIVITY - TOUCH EVENTS =============================================================
 // Handles HTML touch events and formats it nicely for
 
+import {NgZone} from '@angular/core';
 import {Destroyable, PageSliderControlAPI} from '../types';
 
 // Snap back if user has moved less than 10% of the page
@@ -41,20 +42,25 @@ export class TouchEventHandler implements Destroyable {
     private readonly touchEndListener = (e: TouchEvent) => this.touchEnd(e);
 
     public constructor(private readonly delegate: PageSliderControlAPI,
-                       private readonly element: HTMLElement) {
-        // Add touch event listeners
-        this.element.addEventListener('touchstart', this.touchStartListener);
-        this.element.addEventListener('touchmove', this.touchMoveListener);
-        this.element.addEventListener('touchend', this.touchEndListener);
-        this.element.addEventListener('touchcancel', this.touchEndListener);
+                       private readonly element: HTMLElement,
+                       private readonly ngZone: NgZone) {
+        this.ngZone.runOutsideAngular(() => {
+            // Add touch event listeners
+            this.element.addEventListener('touchstart', this.touchStartListener);
+            this.element.addEventListener('touchmove', this.touchMoveListener);
+            this.element.addEventListener('touchend', this.touchEndListener);
+            this.element.addEventListener('touchcancel', this.touchEndListener);
+        });
     }
 
     public destroy(): void {
-        // Remove touch event listeners
-        this.element.removeEventListener('touchstart', this.touchStartListener);
-        this.element.removeEventListener('touchmove', this.touchMoveListener);
-        this.element.removeEventListener('touchend', this.touchEndListener);
-        this.element.removeEventListener('touchcancel', this.touchEndListener);
+        this.ngZone.runOutsideAngular(() => {
+            // Remove touch event listeners
+            this.element.removeEventListener('touchstart', this.touchStartListener);
+            this.element.removeEventListener('touchmove', this.touchMoveListener);
+            this.element.removeEventListener('touchend', this.touchEndListener);
+            this.element.removeEventListener('touchcancel', this.touchEndListener);
+        });
     }
 
     private captureXDiff(diff: number) {

@@ -1,3 +1,4 @@
+import {NgZone} from '@angular/core';
 import {ReplaySubject} from 'rxjs';
 
 /*
@@ -22,29 +23,36 @@ export class SlideAnimation {
                        private readonly currentPX: number,
                        private readonly destPX: number,
                        private readonly momentumPX: number,
-                       private readonly defaultDuration: number = kDefaultDuration) {
+                       private readonly defaultDuration: number = kDefaultDuration,
+                       private readonly ngZone: NgZone) {
         // Set up the CSS transition
         const duration = Math.round(this.calculatedDuration);
         const tProperty = `left ${duration}ms ${kEasingFunction}`;
         element.style.transition = tProperty;
         element.style.webkitTransition = tProperty;
 
-        // Wait for that to propogate
-        setTimeout(() => {
-
-            // Move to the destination location
-            element.style.left = destPX + 'px';
-
-            // Wait for that to finish and clean it up
+        this.ngZone.runOutsideAngular(() => {
+            // Wait for that to propogate
             setTimeout(() => {
-                this._completed.next();
-                this._completed.complete();
 
-                element.style.transition = '';
-                element.style.webkitTransition = '';
-            }, duration + 10);
+                // Move to the destination location
+                element.style.left = destPX + 'px';
 
-        }, 10);
+                this.ngZone.runOutsideAngular(() => {
+                    // Wait for that to finish and clean it up
+                    setTimeout(() => {
+                        this.ngZone.run(() => {
+                            this._completed.next();
+                            this._completed.complete();
+                        });
+
+                        element.style.transition = '';
+                        element.style.webkitTransition = '';
+                    }, duration + 10);
+                });
+
+            }, 10);
+        });
     }
 
     public get completed(): ReplaySubject<void> {

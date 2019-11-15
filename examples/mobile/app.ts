@@ -8,11 +8,11 @@ import {PageSliderModule} from '../../index';
 @Component({
 	selector: 'mobile-example-app',
 	template: `
-        <kb-page-slider>
-            <div *kbPages="let page of pages" class="page" [style.background]="page.color">
+        <ng-page-slider>
+            <div *ngSliderPages="let page of pages" class="page" [style.background]="page.color">
                 <h1>{{page.title}}</h1>
             </div>
-        </kb-page-slider>
+        </ng-page-slider>
 	`,
 	styles: [`
 		:host {
@@ -22,7 +22,7 @@ import {PageSliderModule} from '../../index';
 			height: 100%;
 		}
 	`, `
-		kb-page-slider {
+		ng-page-slider {
 			position: absolute;
 			top: 0;
 			bottom: 0;

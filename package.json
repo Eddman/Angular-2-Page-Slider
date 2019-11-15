@@ -3,11 +3,16 @@
     "version": "1.0.0",
     "scripts": {
         "ng": "ng",
-        "start": "ng serve",
-        "build": "ng build",
-        "test": "ng test",
+        "build": "ng build && npm run themes",
         "lint": "ng lint",
-        "e2e": "ng e2e"
+        "themes": "bundle-scss --config"
+    },
+    "bundleStyle": {
+        "dest": "./dist/eddman/ng-page-slider/ng-page-slider.scss",
+        "mask": "./projects/eddman/ng-page-slider/src/styles.scss",
+        "sort": [
+            "component"
+        ]
     },
     "dependencies": {
         "@angular/animations": "~8.2.13",
@@ -27,9 +32,10 @@
         "@angular/cli": "~8.3.18",
         "@angular/compiler-cli": "~8.2.13",
         "@angular/language-service": "~8.2.13",
-        "@types/node": "~10.17.5",
         "@types/jasmine": "~3.4.6",
         "@types/jasminewd2": "~2.0.8",
+        "@types/node": "~10.17.5",
+        "bundle-scss": "^1.4.10",
         "codelyzer": "^5.2.0",
         "jasmine-core": "~3.5.0",
         "jasmine-spec-reporter": "~4.2.1",

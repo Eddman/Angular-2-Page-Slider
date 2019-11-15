@@ -1,26 +1,20 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
 
 @Component({
-    selector           : 'kb-dot-indicator',
+    selector           : 'ng-dot-indicator',
     templateUrl        : 'dotindicator.component.html',
-    styleUrls          : [
-        './dotindicator.component.scss'
-    ],
     host               : {
-        '[class.kb-dot-indicator]': 'true'
+        '[class.ng-dot-indicator]': 'true'
     },
     changeDetection    : ChangeDetectionStrategy.OnPush,
     preserveWhitespaces: false
 })
-export class KBDotIndicatorComponent {
+export class NDotIndicatorComponent {
 
     private _page: number = 0;
     private _pageCount: number = 0;
 
     private _items: Array<{ active: boolean }> = [];
-
-    @Input()
-    public dotColor: string = 'white';
 
     public constructor(private readonly changeDetectorRef: ChangeDetectorRef) {
     }

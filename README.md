@@ -23,11 +23,11 @@ import {PageSliderModule}    from 'ng2-page-slider';
 @Component({
 	selector: 'example-component',
 	template: `
-		<kb-page-slider>
-			<div *kbPages="let page of pages" class="page" [style.background]="page.color">
+		<ng-page-slider>
+			<div *ngSliderPages="let page of pages" class="page" [style.background]="page.color">
 				<h1>{{page.title}}</h1>
 			</div>
-		</kb-page-slider>
+		</ng-page-slider>
 	`
 })
 export class ExampleComponent {
@@ -58,22 +58,22 @@ import {PageSliderModule}    from 'ng2-page-slider';
 @Component({
 	selector: 'example-component',
 	template: `
-		<kb-page-slider [overlayIndicator]="false" dotColor="black"
+		<ng-page-slider [overlayIndicator]="false" dotColor="black"
 						[(page)]="pageNumber" (pageCountChange)="pageCount = $event">
 
 			<!-- Pages -->
-			<div *kbPages="let page of pages" [style.background]="page.image"></div>
+			<div *ngSliderPages="let page of pages" [style.background]="page.image"></div>
 
 			<!-- Navigation Buttons -->
-			<kb-nav-button backward [showBackground]="true"
+			<ng-slider-nav-button backward [showBackground]="true"
 						[(page)]="pageNumber" [pageCount]="pageCount">
-			</kb-nav-button>
+			</ng-slider-nav-button>
 
-			<kb-nav-button forward [showBackground]="true"
+			<ng-slider-nav-button forward [showBackground]="true"
 						[(page)]="pageNumber" [pageCount]="pageCount">
-			</kb-nav-button>
+			</ng-slider-nav-button>
 
-		</kb-page-slider>
+		</ng-page-slider>
 	`
 })
 export class ExampleComponent {
@@ -103,7 +103,7 @@ although I have not gotten the chance to test that.*
 
 # API
 
-## KBPageSliderComponent (kb-page-slider)
+## KBPageSliderComponent (ng-page-slider)
 Container component for pages. Optionally includes a KBDotIndicatorComponent at the bottom.
 Handles touch events, resizing and animation.
 
@@ -142,7 +142,7 @@ Handles touch events, resizing and animation.
 	* Observe with pageSizeChange
 
 
-## KBPagesRendererDirective (kbPages)
+## KBPagesRendererDirective (ngSliderPages)
 Renders pages using DOM recycling, so only at most 3 exist on the DOM at any given time
 (previous, current, next). Modeled on ngFor, uses the exact same looping syntax.
 
@@ -151,7 +151,7 @@ instead of a loop over a set of data. It'd work but, in the future it might be g
 an alternative directive for that use case.*
 
 ### Provided Loop Variables
-These variables are available inside of kbPages, similar to ngFor loop items.
+These variables are available inside of ngSliderPages, similar to ngFor loop items.
 
 * **index:** *number* Zero-based index of the current page.
 * **isFirst:** *boolean* True when the page is the first page.
@@ -159,7 +159,7 @@ These variables are available inside of kbPages, similar to ngFor loop items.
 * **isActive:** *boolean* True when the page is currently being viewed by the user.
 
 
-## KBDotIndicatorComponent (kb-dot-indicator)
+## KBDotIndicatorComponent (ng-dot-indicator)
 Indicates the current page and the total number of pages using dots, in a style popularized
 by iOS. Scrolls smoothly when the number of pages exceeds the number of dots that can fit on
 the screen. Can be used independantly of KBPageSliderComponent.
@@ -174,7 +174,7 @@ the screen. Can be used independantly of KBPageSliderComponent.
 	* Defaults to white
 
 
-## KBNavButtonComponent (kb-nav-button)
+## KBNavButtonComponent (ng-slider-nav-button)
 Customizable chevron button that can be linked to KBPageSliderComponent. Automatically
 disables on first or last page. Must be used with either a `forward` or `backward`
 attribute to specify direction.

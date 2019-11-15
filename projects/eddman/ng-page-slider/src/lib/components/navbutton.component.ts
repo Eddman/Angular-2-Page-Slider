@@ -3,25 +3,21 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
-    ElementRef,
     EventEmitter,
     Input,
     Output
 } from '@angular/core';
 
 @Component({
-    selector           : 'kb-nav-button',
+    selector           : 'ng-slider-nav-button',
     templateUrl        : 'navbutton.component.html',
-    styleUrls          : [
-        './navbutton.component.scss'
-    ],
     host               : {
-        '[class.kb-nav-button]': 'true'
+        '[class.ng-slider-nav-button]': 'true'
     },
     changeDetection    : ChangeDetectionStrategy.OnPush,
     preserveWhitespaces: false
 })
-export class KBNavButtonComponent {
+export class NgNavButtonComponent {
 
     private readonly isForward: boolean;
 
@@ -29,14 +25,8 @@ export class KBNavButtonComponent {
     private readonly _pageChange = new EventEmitter<number>();
     private _pageCount: number = 0;
 
-    private _size: number;
-    private _showBackground: boolean = false;
-    private _iconColor: string | undefined;
-    private _backgroundColor: string = 'white';
-
     public constructor(@Attribute('forward') forward: string,
                        @Attribute('backward') backward: string,
-                       private readonly element: ElementRef,
                        private readonly changeDetectorRef: ChangeDetectorRef) {
         if (forward != null) {
             if (backward == null) {
@@ -49,28 +39,6 @@ export class KBNavButtonComponent {
         } else {
             throw new Error('Must specify either \'forward\' or \'backward\' on nav button');
         }
-
-        this._size = this.element.nativeElement.offsetHeight || 44;
-    }
-
-    @Input()
-    public set backgroundColor(value: string) {
-        this._backgroundColor = value;
-    }
-
-    @Input()
-    public set iconColor(value: string | undefined) {
-        this._iconColor = value;
-    }
-
-    @Input()
-    public set showBackground(value: boolean) {
-        this._showBackground = value;
-    }
-
-    @Input()
-    public set size(value: number) {
-        this._size = value;
     }
 
     @Input()
@@ -94,25 +62,6 @@ export class KBNavButtonComponent {
         } else {
             return this._page <= 0;
         }
-    }
-
-    public get derivedIconColor() {
-        if (this._iconColor != null) {
-            return this._iconColor;
-        }
-        return (this._showBackground) ? 'black' : 'white';
-    }
-
-    public get derivedBackgroundColor() {
-        return (this._showBackground) ? this._backgroundColor : 'none';
-    }
-
-    public get derivedSize() {
-        return this._size + 'px';
-    }
-
-    public get halfSize() {
-        return this._size / 2 + 'px';
     }
 
     public get symbol() {

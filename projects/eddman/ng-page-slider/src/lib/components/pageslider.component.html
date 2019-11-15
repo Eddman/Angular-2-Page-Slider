@@ -6,16 +6,22 @@
     <ng-content></ng-content>
 </div>
 
-<div class="buttons" *ngIf="buttons?.length > 0" [style.top]="buttonTop">
-    <!-- Display navigation buttons -->
-    <ng-content select="kb-nav-button[forward]"></ng-content>
-    <ng-content select="kb-nav-button[backward]"></ng-content>
+<div class="ng-slider-nav-buttons" [style.top]="buttonTop">
+    <!-- Navigation Buttons -->
+    <ng-slider-nav-button backward
+                   [(page)]="page"
+                   [pageCount]="pageCount">
+    </ng-slider-nav-button>
+
+    <ng-slider-nav-button forward
+                   [(page)]="page"
+                   [pageCount]="pageCount">
+    </ng-slider-nav-button>
 </div>
 
 <!-- Display the page indicator -->
-<kb-dot-indicator *ngIf="showIndicator"
+<ng-dot-indicator *ngIf="showIndicator"
                   [page]="page"
                   [pageCount]="pageCount"
-                  [dotColor]="dotColor"
                   [style.bottom]="dotBottom">
-</kb-dot-indicator>
+</ng-dot-indicator>

@@ -16,20 +16,11 @@
                         "project": "projects/eddman/ng-page-slider/ng-package.json"
                     }
                 },
-                "test": {
-                    "builder": "@angular-devkit/build-angular:karma",
-                    "options": {
-                        "main": "projects/eddman/ng-page-slider/src/test.ts",
-                        "tsConfig": "projects/eddman/ng-page-slider/tsconfig.spec.json",
-                        "karmaConfig": "projects/eddman/ng-page-slider/karma.conf.js"
-                    }
-                },
                 "lint": {
                     "builder": "@angular-devkit/build-angular:tslint",
                     "options": {
                         "tsConfig": [
-                            "projects/eddman/ng-page-slider/tsconfig.lib.json",
-                            "projects/eddman/ng-page-slider/tsconfig.spec.json"
+                            "projects/eddman/ng-page-slider/tsconfig.lib.json"
                         ],
                         "exclude": [
                             "**/node_modules/**"

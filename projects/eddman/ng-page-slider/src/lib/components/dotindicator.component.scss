@@ -1,29 +1,25 @@
-@import "../../globals";
+@mixin ng-dot-indicator($dot_size: 6px, $dot_color: white, $dots_offset: 9px) {
+    .ng-dot-indicator {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
 
-:host {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: row;
-    flex-direction: row;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-}
+        bottom: $dots_offset;
 
-.kb-dot-indicator-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 3px;
-    margin: 0 2px;
-    opacity: 0.33;
+        .ng-dot-indicator-dot {
+            background-color: $dot_color;
 
-    transition: opacity 200ms linear;
-    -webkit-transition: opacity 200ms linear;
-}
+            width: $dot_size;
+            height: $dot_size;
+            border-radius: $dot_size / 2;
+            margin: 0 $dot_size / 3;
 
-.kb-dot-indicator-dot.active {
-    opacity: 1.0;
+            opacity: 0.33;
+            transition: opacity 200ms linear;
+
+            &.active {
+                opacity: 1.0;
+            }
+        }
+    }
 }

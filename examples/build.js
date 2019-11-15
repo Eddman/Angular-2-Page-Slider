@@ -97,7 +97,7 @@ System.register("src/components/render.component", ["@angular/core", "src/types"
                     // DOM RENDERING ========================================================================
                     this.views = [null, null, null];
                 }
-                Object.defineProperty(KBPagesRendererDirective.prototype, "kbPagesOf", {
+                Object.defineProperty(KBPagesRendererDirective.prototype, "ngSliderPagesOf", {
                     set: function (coll) {
                         this.pages = coll;
                         if (this.isInitialized) {
@@ -251,9 +251,9 @@ System.register("src/components/render.component", ["@angular/core", "src/types"
                     core_1.Input(),
                     __metadata("design:type", Array),
                     __metadata("design:paramtypes", [Array])
-                ], KBPagesRendererDirective.prototype, "kbPagesOf", null);
+                ], KBPagesRendererDirective.prototype, "ngSliderPagesOf", null);
                 KBPagesRendererDirective = __decorate([
-                    core_1.Directive({ selector: '[kbPages]' }),
+                    core_1.Directive({ selector: '[ngSliderPages]' }),
                     __metadata("design:paramtypes", [core_1.ViewContainerRef,
                         core_1.TemplateRef])
                 ], KBPagesRendererDirective);
@@ -686,7 +686,7 @@ System.register("src/components/navbutton.component", ["@angular/core"], functio
                 ], KBNavButtonComponent.prototype, "backgroundColor", void 0);
                 KBNavButtonComponent = __decorate([
                     core_2.Component({
-                        selector: 'kb-nav-button',
+                        selector: 'ng-slider-nav-button',
                         template: "\n        <a (click)=\"OnClick()\"\n           [innerHTML]=\"symbol\"\n           [class.circle]=\"showBackground\"\n           [class.disabled]=\"disabled\"\n           [style.width]=\"derivedSize\" [style.height]=\"derivedSize\"\n           [style.borderRadius]=\"halfSize\"\n           [style.fontSize]=\"derivedSize\"\n           [style.color]=\"derivedIconColor\"\n           [style.backgroundColor]=\"derivedBackgroundColor\"\n        ></a>\n\t",
                         styles: [
                             ":host {\n\t\t\tcursor: pointer;\n\t\t\t-webkit-touch-callout: none; /* iOS Safari */\n\t\t\t-webkit-user-select: none; /* Chrome/Safari/Opera */\n\t\t\t-khtml-user-select: none; /* Konqueror */\n\t\t\t-moz-user-select: none; /* Firefox */\n\t\t\t-ms-user-select: none; /* Internet Explorer/Edge */\n\t\t\tuser-select: none;\n\t\t}",
@@ -890,8 +890,8 @@ System.register("src/components/pageslider.component", ["src/components/render.c
                 KBPageSliderComponent.prototype.ngOnInit = function () {
                     var _this = this;
                     if (!this.renderer) {
-                        console.log("\n\t\t\t\tThe *kbPages directive is used to render pages efficiently, such that only\n\t\t\t\tpages that are visible are in the DOM. Without this directive, the page\n\t\t\t\tslider will not display anything.\n\t\t\t");
-                        throw new Error('No *kbPages directive found inside kb-page-slider');
+                        console.log("\n\t\t\t\tThe *ngSliderPages directive is used to render pages efficiently, such that only\n\t\t\t\tpages that are visible are in the DOM. Without this directive, the page\n\t\t\t\tslider will not display anything.\n\t\t\t");
+                        throw new Error('No *ngSliderPages directive found inside ng-page-slider');
                     }
                     this.renderer.pageCountChange.subscribe(function (count) {
                         _this.pageCountChange.emit(count);
@@ -1059,16 +1059,16 @@ System.register("src/components/pageslider.component", ["src/components/render.c
                 ], KBPageSliderComponent.prototype, "renderer", void 0);
                 KBPageSliderComponent = __decorate([
                     core_3.Component({
-                        selector: 'kb-page-slider',
-                        template: "\n        <!-- Display the actual pages -->\n        <div class=\"inner\"\n             [style.width]=\"containerWidth\"\n             [style.height]=\"containerHeight\">\n            <ng-content></ng-content>\n        </div>\n\n        <div class=\"buttons\" *ngIf=\"buttons.length > 0\" [style.top]=\"buttonTop\">\n            <!-- Display navigation buttons -->\n            <ng-content select=\"kb-nav-button[forward]\"></ng-content>\n            <ng-content select=\"kb-nav-button[backward]\"></ng-content>\n        </div>\n\n        <!-- Display the page indicator -->\n        <kb-dot-indicator *ngIf=\"showIndicator\"\n                          [page]=\"page\"\n                          [pageCount]=\"pageCount\"\n                          [dotColor]=\"dotColor\"\n                          [style.bottom]=\"dotBottom\">\n        </kb-dot-indicator>\n\t",
+                        selector: 'ng-page-slider',
+                        template: "\n        <!-- Display the actual pages -->\n        <div class=\"inner\"\n             [style.width]=\"containerWidth\"\n             [style.height]=\"containerHeight\">\n            <ng-content></ng-content>\n        </div>\n\n        <div class=\"buttons\" *ngIf=\"buttons.length > 0\" [style.top]=\"buttonTop\">\n            <!-- Display navigation buttons -->\n            <ng-content select=\"ng-slider-nav-button[forward]\"></ng-content>\n            <ng-content select=\"ng-slider-nav-button[backward]\"></ng-content>\n        </div>\n\n        <!-- Display the page indicator -->\n        <ng-dot-indicator *ngIf=\"showIndicator\"\n                          [page]=\"page\"\n                          [pageCount]=\"pageCount\"\n                          [dotColor]=\"dotColor\"\n                          [style.bottom]=\"dotBottom\">\n        </ng-dot-indicator>\n\t",
                         styles: [
                             ":host {\n\t\t\toverflow: hidden;\n\t\t\tdisplay: block;\n\t\t\tposition: relative;\n\t\t}",
                             ".inner {\n\t\t\tposition: absolute;\n\t\t\ttop: 0;\n\t\t\twill-change: left;\n\t\t}",
-                            "kb-dot-indicator {\n\t\t\tposition: absolute;\n\t\t\twidth: 100%;\n\t\t}",
+                            "ng-dot-indicator {\n\t\t\tposition: absolute;\n\t\t\twidth: 100%;\n\t\t}",
                             ".buttons {\n\t\t\tposition: absolute;\n\t\t\tz-index: 100;\n\t\t\twidth: 100%;\n\t\t}",
-                            ".buttons >>> kb-nav-button {\n\t\t\tposition: absolute;\n\t\t\ttop: 0;\n\t\t}",
-                            ".buttons >>> kb-nav-button[backward] {\n\t\t\tleft: 15px;\n\t\t}",
-                            ".buttons >>> kb-nav-button[forward] {\n\t\t\tright: 15px;\n\t\t}"
+                            ".buttons >>> ng-slider-nav-button {\n\t\t\tposition: absolute;\n\t\t\ttop: 0;\n\t\t}",
+                            ".buttons >>> ng-slider-nav-button[backward] {\n\t\t\tleft: 15px;\n\t\t}",
+                            ".buttons >>> ng-slider-nav-button[forward] {\n\t\t\tright: 15px;\n\t\t}"
                         ]
                     }),
                     __metadata("design:paramtypes", [core_3.ElementRef])
@@ -1147,7 +1147,7 @@ System.register("src/components/dotindicator.component", ["@angular/core"], func
                 ], KBDotIndicatorComponent.prototype, "dotColor", void 0);
                 KBDotIndicatorComponent = __decorate([
                     core_4.Component({
-                        selector: 'kb-dot-indicator',
+                        selector: 'ng-dot-indicator',
                         template: "\n        <div *ngFor=\"let item of items\" class=\"dot\"\n             [style.background]=\"dotColor\"\n             [class.active]=\"item.active\"></div>\n\t",
                         styles: [
                             ":host {\n\t\t\tdisplay: -webkit-box;\n\t\t\tdisplay: -ms-flexbox;\n\t\t\tdisplay: flex;\n\t\t\t-webkit-box-orient: horizontal;\n\t\t\t-webkit-box-direction: normal;\n\t\t\t-ms-flex-direction: row;\n\t\t\tflex-direction: row;\n\t\t\t-webkit-box-pack: center;\n\t\t\t-ms-flex-pack: center;\n\t\t\tjustify-content: center;\n\t\t}",
@@ -1334,7 +1334,7 @@ System.register("examples/hero/app", ["@angular/core", "@angular/platform-browse
                 HeroAppComponent = __decorate([
                     core_6.Component({
                         selector: 'hero-example-app',
-                        template: "\n        <div class=\"header\">\n            <h1>My Great Website</h1>\n        </div>\n        <kb-page-slider [overlayIndicator]=\"false\" dotColor=\"black\"\n                        [(page)]=\"pageNumber\" (pageCountChange)=\"pageCount = $event\">\n\n            <!-- Pages -->\n            <div *kbPages=\"let page of pages\" class=\"page\" [style.background]=\"page.color\">\n                <div class=\"pageTitle\">{{page.title}}</div>\n            </div>\n\n            <!-- Navigation -->\n            <kb-nav-button backward [showBackground]=\"true\"\n                           [(page)]=\"pageNumber\" [pageCount]=\"pageCount\">\n            </kb-nav-button>\n            <kb-nav-button forward [showBackground]=\"true\"\n                           [(page)]=\"pageNumber\" [pageCount]=\"pageCount\">\n            </kb-nav-button>\n        </kb-page-slider>\n\t",
+                        template: "\n        <div class=\"header\">\n            <h1>My Great Website</h1>\n        </div>\n        <ng-page-slider [overlayIndicator]=\"false\" dotColor=\"black\"\n                        [(page)]=\"pageNumber\" (pageCountChange)=\"pageCount = $event\">\n\n            <!-- Pages -->\n            <div *ngSliderPages=\"let page of pages\" class=\"page\" [style.background]=\"page.color\">\n                <div class=\"pageTitle\">{{page.title}}</div>\n            </div>\n\n            <!-- Navigation -->\n            <ng-slider-nav-button backward [showBackground]=\"true\"\n                           [(page)]=\"pageNumber\" [pageCount]=\"pageCount\">\n            </ng-slider-nav-button>\n            <ng-slider-nav-button forward [showBackground]=\"true\"\n                           [(page)]=\"pageNumber\" [pageCount]=\"pageCount\">\n            </ng-slider-nav-button>\n        </ng-page-slider>\n\t",
                         styles: [
                             ".pageTitle {\n\t\t\tposition: absolute;\n\t\t\tleft: 0px;\n\t\t\tbottom: 0px;\n\t\t\twidth: 100%;\n\t\t\theight: 44px;\n\t\t\tline-height: 44px;\n\n\t\t\tbackground-color: rgba(0, 0, 0, 0.25);\n\t\t\tcolor: white;\n\n\t\t\tfont-family: \"San Francisco\", \"Arial\", sans-serif;\n\t\t\tfont-weight: bold;\n\t\t\tfont-size: 18px;\n\t\t\ttext-align: center;\n\t\t}"
                         ]
@@ -1420,8 +1420,8 @@ System.register("examples/mobile/app", ["@angular/core", "@angular/platform-brow
                 MobileAppComponent = __decorate([
                     core_7.Component({
                         selector: 'mobile-example-app',
-                        template: "\n        <kb-page-slider>\n            <div *kbPages=\"let page of pages\" class=\"page\" [style.background]=\"page.color\">\n                <h1>{{page.title}}</h1>\n            </div>\n        </kb-page-slider>\n\t",
-                        styles: ["\n\t\t:host {\n\t\t\tposition: relative;\n\t\t\tdisplay: block;\n\t\t\twidth: 100%;\n\t\t\theight: 100%;\n\t\t}\n\t", "\n\t\tkb-page-slider {\n\t\t\tposition: absolute;\n\t\t\ttop: 0;\n\t\t\tbottom: 0;\n\t\t\tleft: 0;\n\t\t\tright: 0;\n\t\t}\n\t", "\n\t\t.page {\n\t\t\tpadding: 15px 5px;\n\t\t\ttext-align: center;\n\t\t}"
+                        template: "\n        <ng-page-slider>\n            <div *ngSliderPages=\"let page of pages\" class=\"page\" [style.background]=\"page.color\">\n                <h1>{{page.title}}</h1>\n            </div>\n        </ng-page-slider>\n\t",
+                        styles: ["\n\t\t:host {\n\t\t\tposition: relative;\n\t\t\tdisplay: block;\n\t\t\twidth: 100%;\n\t\t\theight: 100%;\n\t\t}\n\t", "\n\t\tng-page-slider {\n\t\t\tposition: absolute;\n\t\t\ttop: 0;\n\t\t\tbottom: 0;\n\t\t\tleft: 0;\n\t\t\tright: 0;\n\t\t}\n\t", "\n\t\t.page {\n\t\t\tpadding: 15px 5px;\n\t\t\ttext-align: center;\n\t\t}"
                         ]
                     })
                 ], MobileAppComponent);

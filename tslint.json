@@ -7,13 +7,13 @@
         "directive-selector": [
             true,
             ["element", "attribute"],
-            "kb",
+            "ng",
             ["kebab-case", "camelCase"]
         ],
         "component-selector": [
             true,
             "element",
-            "kb",
+            "ng",
             "kebab-case"
         ],
         "arrow-return-shorthand": true,

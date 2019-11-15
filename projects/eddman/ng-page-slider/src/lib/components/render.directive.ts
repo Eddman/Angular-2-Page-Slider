@@ -39,7 +39,7 @@ export class KBPage<T extends SliderPage> {
 // Similar to ngFor, but renders items as stacked full-screen pages
 
 @Directive({
-    selector: '[kbPages]'
+    selector: '[ngSliderPages]'
 })
 export class KBPagesRendererDirective<T extends SliderPage> implements OnInit, OnDestroy {
 
@@ -78,7 +78,7 @@ export class KBPagesRendererDirective<T extends SliderPage> implements OnInit, O
     }
 
     @Input()
-    public set kbPagesOf(coll: T[]) {
+    public set ngSliderPagesOf(coll: T[]) {
         this._pages = coll;
 
         if (this.isInitialized) {

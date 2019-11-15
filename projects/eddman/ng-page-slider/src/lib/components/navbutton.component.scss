@@ -1,31 +1,33 @@
-:host {
-    cursor: pointer;
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Chrome/Safari/Opera */
-    -khtml-user-select: none; /* Konqueror */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none;
-}
+@mixin ng-slider-nav-button($arrow_size: 44px, $arrow_line_height: 37px, $arrow_color: white, $arrow_background: rgba(125, 125, 125, 0.4)) {
+    .ng-slider-nav-button {
+        cursor: pointer;
+        user-select: none;
 
-a {
-    display: block;
-    text-align: center;
-    line-height: 36px;
-}
+        & > a {
+            display: block;
+            text-align: center;
+            line-height: 36px;
 
-:host[forward] a {
-    padding-left: 3px;
-}
+            font-size: $arrow_size;
+            width: $arrow_size;
+            height: $arrow_size;
+            line-height: $arrow_line_height;
+            border-radius: $arrow_size;
+            color: $arrow_color;
+            background-color: $arrow_background;
+            padding: 0;
 
-:host[backward] a {
-    padding-right: 3px;
-}
+            &:hover {
+                background-color: scale_color($arrow_background, $alpha: 33%);
+            }
 
-a.circle {
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-}
+            &:active {
+                background-color: scale_color($arrow_background, $alpha: 66%);
+            }
 
-a.disabled {
-    opacity: 0.33;
+            &.disabled {
+                opacity: 0.33;
+            }
+        }
+    }
 }

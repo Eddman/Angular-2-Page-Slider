@@ -11,22 +11,22 @@ import {PageSliderModule} from '../../index';
         <div class="header">
             <h1>My Great Website</h1>
         </div>
-        <kb-page-slider [overlayIndicator]="false" dotColor="black"
+        <ng-page-slider [overlayIndicator]="false" dotColor="black"
                         [(page)]="pageNumber" (pageCountChange)="pageCount = $event">
 
             <!-- Pages -->
-            <div *kbPages="let page of pages" class="page" [style.background]="page.color">
+            <div *ngSliderPages="let page of pages" class="page" [style.background]="page.color">
                 <div class="pageTitle">{{page.title}}</div>
             </div>
 
             <!-- Navigation -->
-            <kb-nav-button backward [showBackground]="true"
+            <ng-slider-nav-button backward [showBackground]="true"
                            [(page)]="pageNumber" [pageCount]="pageCount">
-            </kb-nav-button>
-            <kb-nav-button forward [showBackground]="true"
+            </ng-slider-nav-button>
+            <ng-slider-nav-button forward [showBackground]="true"
                            [(page)]="pageNumber" [pageCount]="pageCount">
-            </kb-nav-button>
-        </kb-page-slider>
+            </ng-slider-nav-button>
+        </ng-page-slider>
 	`,
 	styles: [
 			`.pageTitle {

@@ -1,35 +1,37 @@
-:host {
-    overflow: hidden;
-    display: block;
-    position: relative;
-}
+@mixin ng-page-slider() {
+    .ng-page-slider {
+        overflow: hidden;
+        display: block;
+        position: relative;
 
-.inner {
-    position: absolute;
-    top: 0;
-    will-change: left;
-}
-
-kb-dot-indicator {
-    position: absolute;
-    width: 100%;
-}
-
-.buttons {
-    position: absolute;
-    z-index: 100;
-    width: 100%;
-
-    ::ng-deep kb-nav-button {
-        position: absolute;
-        top: 0;
-
-        &[backward] {
-            left: 15px;
+        .inner {
+            position: absolute;
+            top: 0;
+            will-change: left;
         }
 
-        &[forward] {
-            right: 15px;
+        .ng-dot-indicator {
+            position: absolute;
+            width: 100%;
+        }
+
+        .ng-slider-nav-buttons {
+            position: absolute;
+            z-index: 100;
+            width: 100%;
+
+            .ng-slider-nav-button {
+                position: absolute;
+                top: 0;
+
+                &[backward] {
+                    left: 15px;
+                }
+
+                &[forward] {
+                    right: 15px;
+                }
+            }
         }
     }
 }

@@ -1,45 +1,43 @@
 import {
+    AfterViewChecked,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
     ContentChild,
-    ContentChildren,
     ElementRef,
     EventEmitter,
     Input,
+    NgZone,
     OnDestroy,
+    OnInit,
     Output,
     QueryList,
-    ViewChild
+    ViewChild,
+    ViewChildren
 } from '@angular/core';
 import {takeUntil} from 'rxjs/operators';
 import {SlideAnimation} from '../functionality/animation';
 import {ArrowKeysHandler} from '../functionality/arrowkeys';
-import {SideClickHandler} from '../functionality/sideclick';
 import {TouchEventHandler} from '../functionality/touchevents';
 import {PageSliderControlAPI, SliderPage} from '../types';
-import {KBNavButtonComponent} from './navbutton.component';
+import {NgNavButtonComponent} from './navbutton.component';
 import {KBPagesRendererDirective} from './render.directive';
 
 @Component({
-    selector           : 'kb-page-slider',
+    selector           : 'ng-page-slider',
     templateUrl        : 'pageslider.component.html',
-    styleUrls          : [
-        'pageslider.component.scss'
-    ],
     host               : {
-        '[class.kb-page-slider]': 'true'
+        '[class.ng-page-slider]': 'true'
     },
     changeDetection    : ChangeDetectionStrategy.OnPush,
     preserveWhitespaces: false
 })
-export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
+export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, AfterViewChecked, OnDestroy {
 
     @ViewChild('innerContainer', {static: true})
     private innerContainer: ElementRef | undefined;
 
     private readonly touchEventHandler: TouchEventHandler;
-    private readonly sideClickHandler: SideClickHandler;
     private readonly arrowKeysHandler: ArrowKeysHandler;
 
     // Get the page renderer loop and keep its size up to date
@@ -53,8 +51,6 @@ export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
     @Input()
     public showIndicator: boolean = true;
     private _overlayIndicator: boolean = true;
-    @Input()
-    public dotColor: string = 'white';
 
     // Interactivity
     private _locked: boolean = false;
@@ -66,16 +62,16 @@ export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
 
     private _pageOffset: number = 1;
 
-    @ContentChildren(KBNavButtonComponent)
-    public buttons: QueryList<KBNavButtonComponent> | undefined;
+    @ViewChildren(NgNavButtonComponent, {read: ElementRef})
+    public buttons: QueryList<ElementRef> | undefined;
 
     public constructor(private readonly element: ElementRef,
-                       private readonly changeDetectorRef: ChangeDetectorRef) {
+                       private readonly changeDetectorRef: ChangeDetectorRef,
+                       private readonly ngZone: NgZone) {
         const htmlElement = this.element.nativeElement;
 
-        this.touchEventHandler = new TouchEventHandler(this, htmlElement);
-        this.sideClickHandler = new SideClickHandler(this, htmlElement);
-        this.arrowKeysHandler = new ArrowKeysHandler(this);
+        this.touchEventHandler = new TouchEventHandler(this, htmlElement, ngZone);
+        this.arrowKeysHandler = new ArrowKeysHandler(this, ngZone);
     }
 
     // PUBLIC INTERFACE =====================================================================
@@ -153,11 +149,6 @@ export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
     }
 
     @Input()
-    public set enableSideClicks(enabled: boolean) {
-        this.sideClickHandler.enabled = enabled;
-    }
-
-    @Input()
     public set enableArrowKeys(enabled: boolean) {
         this.arrowKeysHandler.enabled = enabled;
     }
@@ -176,21 +167,17 @@ export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
     private set pageOffset(v: number) {
         this._pageOffset = v;
         if (!this.blockInteraction && this.innerContainer != null) {
-            this.innerContainer.nativeElement.style.left = this.pxOffset;
+            this.innerContainer.nativeElement.style.left = -this.pageOffset * this.pageWidth + 'px';
         }
-    }
-
-    private get pxOffset() {
-        return -this.pageOffset * this.pageWidth + 'px';
     }
 
     // NAV BUTTONS
 
     public get buttonTop() {
-        if (this.buttons == null) {
+        if (this.buttons == null || this.buttons.length === 0) {
             return 0;
         }
-        return this.pageHeight / 2 - this.buttons.first.size / 2 + 'px';
+        return this.pageHeight / 2 - (this.buttons.first.nativeElement.offsetHeight / 2) + 'px';
     }
 
     // SIZING
@@ -199,9 +186,20 @@ export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
         return this.element.nativeElement.offsetWidth;
     }
 
+    private firstImage: HTMLImageElement | undefined;
+
     public get pageHeight() {
-        const fullHeight = this.element.nativeElement.offsetHeight;
         const chin = (this.showIndicator && !this._overlayIndicator) ? 20 : 0;
+        if (this.firstImage != null) {
+            if (this.firstImage.width > this.element.nativeElement.offsetWidth) {
+                this.element.nativeElement.style.height =
+                    `${((this.firstImage.height * this.element.nativeElement.offsetWidth) / this.firstImage.width)
+                       + chin}px`;
+            } else {
+                this.element.nativeElement.style.height = `${this.firstImage.height + chin}px`;
+            }
+        }
+        const fullHeight = this.element.nativeElement.offsetHeight;
         return fullHeight - chin;
     }
 
@@ -214,17 +212,17 @@ export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
     }
 
     public get dotBottom() {
-        return (this._overlayIndicator) ? '16px' : '0px';
+        return (this._overlayIndicator) ? null : '0px';
     }
 
     public ngOnInit() {
         if (!this.renderer) {
             console.log(`
-				The *kbPages directive is used to render pages efficiently, such that only
+				The *ngSliderPages directive is used to render pages efficiently, such that only
 				pages that are visible are in the DOM. Without this directive, the page
 				slider will not display anything.
 			`);
-            throw new Error('No *kbPages directive found inside kb-page-slider');
+            throw new Error('No *ngSliderPages directive found inside ng-page-slider');
         }
 
         // Resize based on size of the first image
@@ -234,40 +232,40 @@ export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
             (pages) => {
                 if (pages.length > 0) {
                     const firstImage = new Image();
+                    this.firstImage = undefined;
                     firstImage.onload = () => {
-                        const chin = (this.showIndicator && !this._overlayIndicator) ? 20 : 0;
-                        if (firstImage.width > this.element.nativeElement.offsetWidth) {
-                            this.element.nativeElement.style.height =
-                                `${((firstImage.height * this.element.nativeElement.offsetWidth) / firstImage.width)
-                                   + chin}px`;
-                        } else {
-                            this.element.nativeElement.style.height = `${firstImage.height + chin}px`;
-                        }
-
-                        this.resizeListener();
+                        this.firstImage = firstImage;
+                        this.resize();
                     };
                     firstImage.src = pages[0].url;
                 }
             }
         );
 
-        this.resizeListener();
-        window.addEventListener('resize', this.resizeListener);
+        this.resize();
+        this.ngZone.runOutsideAngular(() => {
+            window.addEventListener('resize', this.resizeListener);
+        });
+    }
+
+    public ngAfterViewChecked() {
+        console.log('Change detection triggered!');
     }
 
     public ngOnDestroy(): void {
         this.touchEventHandler.destroy();
-        this.sideClickHandler.destroy();
         this.arrowKeysHandler.destroy();
 
-        window.removeEventListener('resize', this.resizeListener);
+        this.ngZone.runOutsideAngular(() => {
+            window.removeEventListener('resize', this.resizeListener);
+        });
 
         // Unsubscribe others
         this.destroyed.emit();
         this.destroyed.complete();
     }
 
-    private readonly resizeListener = () => this.resize();
+    private readonly resizeListener = () => this.ngZone.run(() => this.resize());
 
     private resize() {
         if (this.innerContainer != null) {
@@ -370,7 +368,8 @@ export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
             -this.pageOffset * w,		// Current position (px)
             -x * w,	 					// Destination position (px)
             momentum * w,			 	// User scroll momentum (px/s)
-            this.transitionDuration		// Default duration, when momentum = 0
+            this.transitionDuration,		// Default duration, when momentum = 0
+            this.ngZone
         );
         animation.completed.pipe(
             takeUntil(this.destroyed)
@@ -403,14 +402,14 @@ export class KBPageSliderComponent implements PageSliderControlAPI, OnDestroy {
         // Allow some overscrolling on the first and last page
         if (this.page === 0 && clampX < 1) {
             if (this._enableOverscroll) {
-                clampX = 1 - KBPageSliderComponent.overscrollRamp(1 - clampX);
+                clampX = 1 - NgPageSliderComponent.overscrollRamp(1 - clampX);
             } else {
                 clampX = 1;
             }
         }
         if (this.renderer != null && this.page === this.renderer.pageCount - 1 && clampX > 1) {
             if (this._enableOverscroll) {
-                clampX = 1 + KBPageSliderComponent.overscrollRamp(clampX - 1);
+                clampX = 1 + NgPageSliderComponent.overscrollRamp(clampX - 1);
             } else {
                 clampX = 1;
             }

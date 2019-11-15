@@ -2,6 +2,7 @@
  * When the user clicks very close to the edge of a page, move in that direction.
  */
 
+import {NgZone} from '@angular/core';
 import {Destroyable, PageSliderControlAPI} from '../types';
 
 export class ArrowKeysHandler implements Destroyable {
@@ -10,12 +11,17 @@ export class ArrowKeysHandler implements Destroyable {
 
     private readonly keyDownListener = (e: KeyboardEvent) => this.keyHandler(e);
 
-    public constructor(private readonly delegate: PageSliderControlAPI) {
-        document.addEventListener('keydown', this.keyDownListener);
+    public constructor(private readonly delegate: PageSliderControlAPI,
+                       private readonly ngZone: NgZone) {
+        this.ngZone.runOutsideAngular(() => {
+            document.addEventListener('keydown', this.keyDownListener);
+        });
     }
 
     public destroy(): void {
-        document.removeEventListener('keydown', this.keyDownListener);
+        this.ngZone.runOutsideAngular(() => {
+            document.removeEventListener('keydown', this.keyDownListener);
+        });
     }
 
     public set enabled(value: boolean) {
