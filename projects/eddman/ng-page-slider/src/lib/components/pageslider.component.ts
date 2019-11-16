@@ -258,7 +258,7 @@ export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, Afte
     }
 
     public ngAfterViewChecked() {
-        console.log('Change detection triggered!');
+      //  console.log('Change detection triggered!');
     }
 
     public ngOnDestroy(): void {
