@@ -1,4 +1,4 @@
-@mixin ng-dot-indicator($dot_size: 6px, $dot_color: white, $dots_offset: 9px) {
+@mixin ng-dot-indicator($dot_size, $dot_color, $dots_offset) {
     .ng-dot-indicator {
         display: flex;
         flex-direction: row;

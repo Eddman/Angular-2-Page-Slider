@@ -1,12 +1,19 @@
-@mixin ng-slider-nav-button($arrow_size: 44px, $arrow_line_height: 37px, $arrow_color: white, $arrow_background: rgba(125, 125, 125, 0.4)) {
+@mixin ng-slider-nav-button($arrow_size, $arrow_line_height, $arrow_color, $arrow_background) {
     .ng-slider-nav-button {
         cursor: pointer;
         user-select: none;
 
+        &[backward] {
+            left: $arrow_size / 3;
+        }
+
+        &[forward] {
+            right: $arrow_size / 3;
+        }
+
         & > a {
             display: block;
             text-align: center;
-            line-height: 36px;
 
             font-size: $arrow_size;
             width: $arrow_size;
