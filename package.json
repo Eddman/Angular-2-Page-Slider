@@ -1,11 +1,16 @@
 {
-    "name": "ng-page-slider",
+    "name": "@netocny/ng-page-slider",
     "version": "1.0.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Eddman/Angular-2-Page-Slider"
+    },
     "scripts": {
         "ng": "ng",
-        "build": "ng build && npm run themes",
+        "build": "ng build && npm run themes && npm run static",
         "lint": "ng lint",
-        "themes": "bundle-scss --config"
+        "themes": "bundle-scss --config",
+        "static": "cp LICENSE README.md .npmignore dist/eddman/ng-page-slider/ && cp .npmrc_publish dist/eddman/ng-page-slider/.npmrc"
     },
     "bundleStyle": {
         "dest": "./dist/eddman/ng-page-slider/ng-page-slider.scss",

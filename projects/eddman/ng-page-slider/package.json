@@ -1,8 +1,14 @@
 {
-  "name": "@eddman/ng-page-slider",
-  "version": "1.0.0",
-  "peerDependencies": {
-    "@angular/common": "^8.2.13",
-    "@angular/core": "^8.2.13"
-  }
+    "name": "@netocny/ng-page-slider",
+    "version": "0.0.2",
+    "license": "SEE LICENSE IN LICENSE",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Eddman/Angular-2-Page-Slider"
+    },
+    "readmeFilename": "README.md",
+    "peerDependencies": {
+        "@angular/common": "^8.2.13",
+        "@angular/core": "^8.2.13"
+    }
 }
