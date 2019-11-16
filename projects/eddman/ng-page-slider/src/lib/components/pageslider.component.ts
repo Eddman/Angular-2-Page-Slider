@@ -18,6 +18,7 @@ import {
 import {takeUntil} from 'rxjs/operators';
 import {SlideAnimation} from '../functionality/animation';
 import {ArrowKeysHandler} from '../functionality/arrowkeys';
+import {AutoscrollHandler} from '../functionality/autoscroll';
 import {TouchEventHandler} from '../functionality/touchevents';
 import {PageSliderControlAPI, SliderPage} from '../types';
 import {NgNavButtonComponent} from './navbutton.component';
@@ -62,6 +63,8 @@ export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, Afte
 
     private _pageOffset: number = 1;
 
+    private readonly autoScrollHandler: AutoscrollHandler;
+
     @ViewChildren(NgNavButtonComponent, {read: ElementRef})
     public buttons: QueryList<ElementRef> | undefined;
 
@@ -72,6 +75,7 @@ export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, Afte
 
         this.touchEventHandler = new TouchEventHandler(this, htmlElement, ngZone);
         this.arrowKeysHandler = new ArrowKeysHandler(this, ngZone);
+        this.autoScrollHandler = new AutoscrollHandler(this, this.ngZone);
     }
 
     // PUBLIC INTERFACE =====================================================================
@@ -156,6 +160,11 @@ export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, Afte
     @Output()
     public get scrollStateChange(): EventEmitter<boolean> {
         return this._scrollStateChange;
+    }
+
+    @Input()
+    public set autoScrollInterval(value: number | undefined) {
+        this.autoScrollHandler.autoScrollInterval = value;
     }
 
     // INTERNAL STATE =======================================================================
@@ -255,6 +264,7 @@ export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, Afte
     public ngOnDestroy(): void {
         this.touchEventHandler.destroy();
         this.arrowKeysHandler.destroy();
+        this.autoScrollHandler.destroy();
 
         this.ngZone.runOutsideAngular(() => {
             window.removeEventListener('resize', this.resizeListener);
@@ -302,6 +312,7 @@ export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, Afte
                     takeUntil(this.destroyed)
                 ).subscribe(() => {
                     this.pageOffset = 1;
+                    this.changeDetectorRef.markForCheck();
                 });
             }
             return animation;
@@ -316,6 +327,7 @@ export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, Afte
                     this.renderer.page++;
                     this._pageChange.emit(this.renderer.page);
                     this.pageOffset = 1;
+                    this.changeDetectorRef.markForCheck();
                 }
             });
         }
@@ -336,6 +348,7 @@ export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, Afte
                     takeUntil(this.destroyed)
                 ).subscribe(() => {
                     this.pageOffset = 1;
+                    this.changeDetectorRef.markForCheck();
                 });
             }
             return animation;
@@ -350,6 +363,7 @@ export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, Afte
                     this.renderer.page--;
                     this._pageChange.emit(this.renderer.page);
                     this.pageOffset = 1;
+                    this.changeDetectorRef.markForCheck();
                 }
             });
         }
@@ -375,6 +389,7 @@ export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, Afte
             takeUntil(this.destroyed)
         ).subscribe(() => {
             this.blockInteraction = false;
+            this.changeDetectorRef.markForCheck();
         });
         return animation;
     }

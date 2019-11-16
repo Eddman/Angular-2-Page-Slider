@@ -23,8 +23,10 @@ export interface PageSliderControlAPI {
 
     endScroll(): void;
 
-    pageWidth: number;
-    pageHeight: number;
+    readonly page: number;
+    readonly pageCount: number;
+    readonly transitionDuration: number;
+    readonly pageWidth: number;
 }
 
 export interface Destroyable {
