@@ -34,5 +34,5 @@ export interface Destroyable {
 }
 
 export interface SliderPage {
-    url: string;
+    imageURL?: string;
 }

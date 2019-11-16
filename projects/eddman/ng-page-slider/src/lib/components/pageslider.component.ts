@@ -234,19 +234,19 @@ export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, Afte
             throw new Error('No *ngSliderPages directive found inside ng-page-slider');
         }
 
-        // Resize based on size of the first image
+        // Resize based on size of the first image (if provided)
         this.renderer.pagesChange.pipe(
             takeUntil(this.destroyed)
         ).subscribe(
             (pages) => {
-                if (pages.length > 0) {
+                if (pages.length > 0 && pages[0].imageURL) {
                     const firstImage = new Image();
                     this.firstImage = undefined;
                     firstImage.onload = () => {
                         this.firstImage = firstImage;
                         this.resize();
                     };
-                    firstImage.src = pages[0].url;
+                    firstImage.src = pages[0].imageURL;
                 }
             }
         );
