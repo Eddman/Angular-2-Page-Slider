@@ -1,6 +1,6 @@
 {
   "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../../dist/eddman/ng-page-slider",
+  "dest": "../../../dist/netocny/ng-page-slider",
   "lib": {
     "entryFile": "src/public-api.ts"
   }

@@ -21,13 +21,14 @@ npm install --save @netocny/ng-page-slider
 
 ```typescript
 import {Component, NgModule} from '@angular/core';
-import {NgPageSliderModule}    from '@netocny/ng-page-slider';
+import {NgPageSliderModule} from '@netocny/ng-page-slider';   
+import {of} from 'rxjs';
 
 @Component({
 	selector: 'example-component',
 	template: `
 		<ng-page-slider
-                *ngIf="sliderConfiguration | async as loadedPages"
+                *ngIf="pages | async as loadedPages"
                 [enableArrowKeys]="keysEnabled"
                 [transitionDuration]="loadedPages.duration"
                 [autoScrollInterval]="loadedPages.autoSlide">

@@ -19,8 +19,8 @@
             "dom"
         ],
         "paths": {
-            "@eddman/ng-page-slider/*": [
-                "projects/eddman/ng-page-slider/*"
+            "@netocny/ng-page-slider": [
+                "projects/netocny/ng-page-slider/src/public-api.ts"
             ]
         },
         "sourceMap": true,

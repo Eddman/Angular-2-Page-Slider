@@ -10,11 +10,11 @@
         "build": "ng build && npm run themes && npm run static",
         "lint": "ng lint",
         "themes": "bundle-scss --config",
-        "static": "cp LICENSE README.md .npmignore dist/eddman/ng-page-slider/ && cp .npmrc_publish dist/eddman/ng-page-slider/.npmrc"
+        "static": "cp LICENSE README.md .npmignore dist/netocny/ng-page-slider/ && cp .npmrc_publish dist/netocny/ng-page-slider/.npmrc"
     },
     "bundleStyle": {
-        "dest": "./dist/eddman/ng-page-slider/ng-page-slider.scss",
-        "mask": "./projects/eddman/ng-page-slider/src/styles.scss",
+        "dest": "./dist/netocny/ng-page-slider/ng-page-slider.scss",
+        "mask": "./projects/netocny/ng-page-slider/src/styles.scss",
         "sort": [
             "component"
         ]

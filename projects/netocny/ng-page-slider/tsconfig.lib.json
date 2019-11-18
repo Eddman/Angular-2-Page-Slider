@@ -1,5 +1,12 @@
 {
     "extends": "../../../tsconfig.lib.json",
+    "compilerOptions": {
+        "paths": {
+            "@netocny/ng-page-slider": [
+                "projects/netocny/ng-page-slider/src/public-api.ts"
+            ]
+        }
+    },
     "angularCompilerOptions": {
         "annotateForClosureCompiler": true,
         "skipTemplateCodegen": true,
