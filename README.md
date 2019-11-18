@@ -14,7 +14,7 @@ http://samuel.netocny.com
 
 ### Installation
 ```
-npm install --save ng2-page-slider
+npm install --save @netocny/ng-page-slider
 ```
 
 ### Typescript
