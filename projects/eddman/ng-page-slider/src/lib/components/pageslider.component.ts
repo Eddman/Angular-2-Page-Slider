@@ -22,7 +22,7 @@ import {AutoscrollHandler} from '../functionality/autoscroll';
 import {TouchEventHandler} from '../functionality/touchevents';
 import {PageSliderControlAPI, SliderPage} from '../types';
 import {NgNavButtonComponent} from './navbutton.component';
-import {KBPagesRendererDirective} from './render.directive';
+import {NgPagesRendererDirective} from './render.directive';
 
 @Component({
     selector           : 'ng-page-slider',
@@ -43,8 +43,8 @@ export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, Afte
     private readonly autoScrollHandler: AutoscrollHandler;
 
     // Get the page renderer loop and keep its size up to date
-    @ContentChild(KBPagesRendererDirective, {static: true})
-    public renderer: KBPagesRendererDirective<SliderPage> | undefined;
+    @ContentChild(NgPagesRendererDirective, {static: true})
+    public renderer: NgPagesRendererDirective<SliderPage> | undefined;
 
     private readonly _pageChange = new EventEmitter<number>();
     private readonly _pageSizeChange = new EventEmitter<[number, number]>();

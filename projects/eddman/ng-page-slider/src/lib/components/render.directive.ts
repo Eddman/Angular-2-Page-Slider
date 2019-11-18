@@ -16,10 +16,10 @@ import {SliderPage, StackLocation} from '../types';
 // PAGE CLASS ===============================================================================
 // Stores information about each page that is accessible from the template
 
-export class KBPage<T extends SliderPage> {
+export class NgSliderPage<T extends SliderPage> {
     public constructor(public readonly $implicit: T,
                        public readonly index: number,
-                       private readonly parent: KBPagesRendererDirective<T>) {
+                       private readonly parent: NgPagesRendererDirective<T>) {
     }
 
     public get isActive() {
@@ -41,7 +41,7 @@ export class KBPage<T extends SliderPage> {
 @Directive({
     selector: '[ngSliderPages]'
 })
-export class KBPagesRendererDirective<T extends SliderPage> implements OnInit, OnDestroy {
+export class NgPagesRendererDirective<T extends SliderPage> implements OnInit, OnDestroy {
 
     // Page access
     private _page: number = 0;
@@ -64,7 +64,7 @@ export class KBPagesRendererDirective<T extends SliderPage> implements OnInit, O
 
     // Angular Injection
     public constructor(private readonly viewContainer: ViewContainerRef,
-                       private readonly template: TemplateRef<KBPage<T>>,
+                       private readonly template: TemplateRef<NgSliderPage<T>>,
                        private readonly changeDetectorRef: ChangeDetectorRef) {
     }
 
@@ -160,7 +160,7 @@ export class KBPagesRendererDirective<T extends SliderPage> implements OnInit, O
         // Create the page given the template
         this.views[loc] = this.viewContainer.createEmbeddedView(
             this.template,
-            new KBPage(this._pages[pageNumber], pageNumber, this));
+            new NgSliderPage(this._pages[pageNumber], pageNumber, this));
 
         // Style the page accordingly
         this.restylePage(loc);

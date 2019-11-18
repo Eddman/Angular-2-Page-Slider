@@ -3,7 +3,7 @@ import {NgModule} from '@angular/core';
 import {NDotIndicatorComponent} from './components/dotindicator.component';
 import {NgNavButtonComponent} from './components/navbutton.component';
 import {NgPageSliderComponent} from './components/pageslider.component';
-import {KBPagesRendererDirective} from './components/render.directive';
+import {NgPagesRendererDirective} from './components/render.directive';
 
 @NgModule({
     imports     : [
@@ -11,13 +11,13 @@ import {KBPagesRendererDirective} from './components/render.directive';
     ],
     declarations: [
         NgPageSliderComponent,
-        KBPagesRendererDirective,
+        NgPagesRendererDirective,
         NDotIndicatorComponent,
         NgNavButtonComponent
     ],
     exports     : [
         NgPageSliderComponent,
-        KBPagesRendererDirective
+        NgPagesRendererDirective
     ]
 })
 export class NgPageSliderModule {
