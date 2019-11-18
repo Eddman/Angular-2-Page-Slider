@@ -47,7 +47,6 @@ export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, Afte
     public renderer: NgPagesRendererDirective<SliderPage> | undefined;
 
     private readonly _pageChange = new EventEmitter<number>();
-    private readonly _pageSizeChange = new EventEmitter<[number, number]>();
 
     // Dot Indicator
     @Input()
@@ -119,11 +118,6 @@ export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, Afte
     @Output()
     public get pageChange(): EventEmitter<number> {
         return this._pageChange;
-    }
-
-    @Output()
-    public get pageSizeChange(): EventEmitter<[number, number]> {
-        return this._pageSizeChange;
     }
 
     public get pageCount() {

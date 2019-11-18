@@ -26,29 +26,47 @@ import {NgPageSliderModule}    from '@netocny/ng-page-slider';
 @Component({
 	selector: 'example-component',
 	template: `
-		<ng-page-slider *ngIf="sliderConfiguration && (sliderConfiguration | async) as loadedPages"
-                        [enableArrowKeys]="keysEnabled"
-                        [transitionDuration]="loadedPages.duration"
-                        [autoScrollInterval]="loadedPages.autoSlide">
-        
+		<ng-page-slider
+                *ngIf="sliderConfiguration | async as loadedPages"
+                [enableArrowKeys]="keysEnabled"
+                [transitionDuration]="loadedPages.duration"
+                [autoScrollInterval]="loadedPages.autoSlide">
             <!-- Pages -->
-            <div *ngSliderPages="let page of loadedPages.images" class="page">
+            <div *ngSliderPages="let page of loadedPages.images" 
+                    class="page">
                 <img [src]="page.imageURL">
                 <span class="title">{{page.title}}</span>
             </div>
         </ng-page-slider>
-	`
+	`,
+    styles: [
+        `.page {
+            overflow: hidden;   
+        }`,
+        `img {
+            height: 100%;
+            margin: auto;
+            display: block;
+        }`,
+        `.title {
+            font-size: 20px;
+            color: white;
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+        }`
+    ]
 })
 export class ExampleComponent {    
     public keysEnabled: boolean = true;
-	public pages = {   
+	public pages = of({   
         duration: 700,
         autoSlide: 2000,
         images: [
 		    { title: "Page 1", imageURL: 'some/image.png' },
 		    { title: "Page 2", imageURL: 'some/other_image.png' }
 	    ] 
-    }
+    });
 } 
 
 @NgModule({
@@ -61,6 +79,29 @@ export class ExampleComponent {
 })
 export class ExampleModule {
 }
+```
+
+### Styles - SCSS
+And in `styles.scss` include:
+```scss
+@import "~@netocny/ng-page-slider/ng-page-slider";
+
+// Below this thershold the relative CSS units will be used and 
+// parts of the component became smaller (responsive design)
+$minimal_page_width: 900px;                          
+$page_margin: 15px;        
+         
+@include ng-page-slider($minimal_page_width, $page_margin);
+
+// All options and defaults
+@include ng-page-slider(
+    $optimal_width, $page_margin,
+    $arrow_size: 44px,
+    $arrow_line_height: 37px,
+    $arrow_color: white, $arrow_background: rgba(125, 125, 125, 0.4),
+    $dot_size: 6px, $dot_bottom_offset: 9px,
+    $dot_color: white
+)
 ```
 
 # API
@@ -82,13 +123,13 @@ Container component for pages. Handles touch events, resizing and animation.
 	* Boolean, defaults to true
 * **overlayIndicator:** When true, renders indicator above the page content.
 	* Boolean, defaults to true
-* **dotColor:** Color of the active page dot (other dots are the same color but more transparent)
-	* CSS Color string (color name, hex, rgb, or rgba)
-	* Defaults to white
 * **enableOverscroll:** When true, user can scroll slightly past the first and last page.
 	* Boolean, defaults to true
 * **enableArrowKeys:** When true, the left and right arrow keys will cause page navigation.
 	* Boolean, defaults to true
+* **autoScrollInterval:** If provided the slider will auto-scroll until user interacts with it.
+	* Number of miliseconds before a next slide is shown
+	* Must be a number > 0 (excluding)
 
 ## NgPagesRendererDirective (ngSliderPages)
 Renders pages using DOM recycling, so only at most 3 exist on the DOM at any given time
