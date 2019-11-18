@@ -9,13 +9,15 @@
 <div class="ng-slider-nav-buttons" [style.top]="buttonTop">
     <!-- Navigation Buttons -->
     <ng-slider-nav-button backward
-                   [(page)]="page"
-                   [pageCount]="pageCount">
+                          [(page)]="page"
+                          [pageCount]="pageCount"
+                          (pageChange)="emitHumanInteraction()">
     </ng-slider-nav-button>
 
     <ng-slider-nav-button forward
-                   [(page)]="page"
-                   [pageCount]="pageCount">
+                          [(page)]="page"
+                          [pageCount]="pageCount"
+                          (pageChange)="emitHumanInteraction()">
     </ng-slider-nav-button>
 </div>
 

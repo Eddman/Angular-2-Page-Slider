@@ -19,9 +19,7 @@ export interface PageSliderControlAPI {
 
     animateToPreviousPage(momentum: number): void;
 
-    startScroll(): void;
-
-    endScroll(): void;
+    emitHumanInteraction(): void;
 
     readonly page: number;
     readonly pageCount: number;

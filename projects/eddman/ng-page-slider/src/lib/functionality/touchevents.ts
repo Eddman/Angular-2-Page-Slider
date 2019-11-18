@@ -122,7 +122,7 @@ export class TouchEventHandler implements Destroyable {
                     return;
                 } else {
                     this.accepted = true;
-                    this.delegate.startScroll();
+                    this.delegate.emitHumanInteraction();
                 }
             } else {
                 return;
@@ -131,7 +131,7 @@ export class TouchEventHandler implements Destroyable {
 
         event.preventDefault();
         this.captureXDiff(diffX);
-        this.currentScroll = this.currentScroll - diffX;
+        this.currentScroll -= diffX;
         this.delegate.scrollTo(this.currentScroll);
         this.currentX = newX;
     }
@@ -150,7 +150,6 @@ export class TouchEventHandler implements Destroyable {
             return;
         }
         event.preventDefault();
-        this.delegate.endScroll();
 
         this.currentScroll = 1;
         const endingMomentumX = this.momentumX;

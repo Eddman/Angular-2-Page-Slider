@@ -14,7 +14,7 @@ export class AutoscrollHandler implements Destroyable {
 
     public set autoScrollInterval(value: number | undefined) {
         this._autoScrollInterval = value;
-        if (this._autoScrollInterval == null) {
+        if (this._autoScrollInterval == null || this._autoScrollInterval <= 0) {
             this.stopAutoScroll();
         } else {
             this.startAutoScroll();
@@ -61,18 +61,15 @@ export class AutoscrollHandler implements Destroyable {
 
     private scrollToNext(): void {
         if (!this._enabled) {
+            this.stopAutoScroll();
             return;
         }
         if (this.delegate.page < this.delegate.pageCount - 1) {
             // Move one slide forward
-            this.ngZone.run(() => {
-                this.delegate.animateToNextPage(0);
-            });
+            this.delegate.animateToNextPage(0);
         } else {
             // Move to front
-            this.ngZone.run(() => {
-                this.moveToFirst();
-            });
+            this.moveToFirst();
         }
     }
 
@@ -83,9 +80,7 @@ export class AutoscrollHandler implements Destroyable {
             this.delegate.animateToPreviousPage(10);
             this.ngZone.runOutsideAngular(() => {
                 setTimeout(() => {
-                    this.ngZone.run(() => {
-                        this.moveToFirst();
-                    });
+                    this.moveToFirst();
                 }, 10);
             });
         } else {

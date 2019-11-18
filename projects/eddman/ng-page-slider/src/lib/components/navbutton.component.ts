@@ -65,7 +65,7 @@ export class NgNavButtonComponent {
     }
 
     public get symbol() {
-        return (this.isForward) ? '&rsaquo;' : '&lsaquo;';
+        return this.isForward ? '&rsaquo;' : '&lsaquo;';
     }
 
     public handleClick() {

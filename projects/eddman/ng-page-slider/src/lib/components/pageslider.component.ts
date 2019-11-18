@@ -40,6 +40,7 @@ export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, Afte
 
     private readonly touchEventHandler: TouchEventHandler;
     private readonly arrowKeysHandler: ArrowKeysHandler;
+    private readonly autoScrollHandler: AutoscrollHandler;
 
     // Get the page renderer loop and keep its size up to date
     @ContentChild(KBPagesRendererDirective, {static: true})
@@ -57,13 +58,11 @@ export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, Afte
     private _locked: boolean = false;
     private _enableOverscroll: boolean = true;
 
-    private readonly _scrollStateChange = new EventEmitter<boolean>();
-
     private readonly destroyed = new EventEmitter<void>();
 
     private _pageOffset: number = 1;
 
-    private readonly autoScrollHandler: AutoscrollHandler;
+    private firstImage: HTMLImageElement | undefined;
 
     @ViewChildren(NgNavButtonComponent, {read: ElementRef})
     public buttons: QueryList<ElementRef> | undefined;
@@ -157,11 +156,6 @@ export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, Afte
         this.arrowKeysHandler.enabled = enabled;
     }
 
-    @Output()
-    public get scrollStateChange(): EventEmitter<boolean> {
-        return this._scrollStateChange;
-    }
-
     @Input()
     public set autoScrollInterval(value: number | undefined) {
         this.autoScrollHandler.autoScrollInterval = value;
@@ -194,8 +188,6 @@ export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, Afte
     public get pageWidth() {
         return this.element.nativeElement.offsetWidth;
     }
-
-    private firstImage: HTMLImageElement | undefined;
 
     public get pageHeight() {
         const chin = (this.showIndicator && !this._overlayIndicator) ? 20 : 0;
@@ -285,6 +277,13 @@ export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, Afte
             this.renderer.resize(this.pageWidth, this.pageHeight);
         }
         this.changeDetectorRef.markForCheck();
+    }
+
+    /**
+     * Called anytime user interacts with the slider to disable the autoscroll.
+     */
+    public emitHumanInteraction(): void {
+        this.autoScrollHandler.enabled = false;
     }
 
     // INTERACTIVE NAVIGATION ===============================================================
@@ -392,14 +391,6 @@ export class NgPageSliderComponent implements PageSliderControlAPI, OnInit, Afte
             this.changeDetectorRef.markForCheck();
         });
         return animation;
-    }
-
-    public startScroll() {
-        this._scrollStateChange.emit(true);
-    }
-
-    public endScroll() {
-        this._scrollStateChange.emit(false);
     }
 
     // OVERSCROLL (iOS STYLE) ===============================================================

@@ -34,17 +34,27 @@ export class ArrowKeysHandler implements Destroyable {
         }
         switch (true) {
             case e.key === 'ArrowLeft':
-                this.delegate.animateToPreviousPage(0);
+                this.goToPrevious();
                 return;
             case e.key === 'ArrowRight':
-                this.delegate.animateToNextPage(0);
+                this.getToNext();
                 return;
             case e.keyCode === 37:
-                this.delegate.animateToPreviousPage(0);
+                this.goToPrevious();
                 return;
             case e.keyCode === 39:
-                this.delegate.animateToNextPage(0);
+                this.getToNext();
                 return;
         }
+    }
+
+    private getToNext() {
+        this.delegate.animateToNextPage(0);
+        this.delegate.emitHumanInteraction();
+    }
+
+    private goToPrevious() {
+        this.delegate.animateToPreviousPage(0);
+        this.delegate.emitHumanInteraction();
     }
 }
