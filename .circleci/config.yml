@@ -25,10 +25,11 @@ jobs:
       - attach_workspace:
           at: .
 
-      - name: Publish to npmjs
-        run: |
-          cd dist/netocny/ng-page-slider/
-          npm publish
+      - run:
+          name: Publish to NPMJS
+          command: |
+            cd dist/netocny/ng-page-slider/
+            npm publish
 workflows:
   build-and-test:
     jobs:
