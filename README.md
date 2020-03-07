@@ -134,7 +134,7 @@ Container component for pages. Handles touch events, resizing and animation.
 
 ## NgPagesRendererDirective (`ngSliderPages`)
 Renders pages using DOM recycling, so only at most 3 exist on the DOM at any given time
-(previous, current, next). Modeled on ngFor, uses the exact same looping syntax.
+(previous, current, next). Modeled based on `ngFor`, uses the exact same looping syntax.
 
 ### Provided Loop Variables
 These variables are available inside of ngSliderPages, similar to ngFor loop items.
