@@ -28,8 +28,7 @@ jobs:
       - run:
           name: Publish to NPMJS
           command: |
-            ls -R
-            cd dist/netocny/ng-page-slider/
+            cd ng-page-slider/
             npm publish
 workflows:
   build-and-test:
