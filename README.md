@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/Eddman/ng-page-slider.svg?style=svg)](https://circleci.com/gh/Eddman/ng-page-slider)
+
 **Fork of [KeatonTech/Angular-2-Page-Slider](https://github.com/KeatonTech/Angular-2-Page-Slider).**
 ---
 
