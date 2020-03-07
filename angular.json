@@ -14,6 +14,11 @@
                     "options": {
                         "tsConfig": "projects/netocny/ng-page-slider/tsconfig.lib.json",
                         "project": "projects/netocny/ng-page-slider/ng-package.json"
+                    },
+                    "configurations": {
+                        "production": {
+                            "tsConfig": "projects/netocny/ng-page-slider/tsconfig.lib.prod.json"
+                        }
                     }
                 },
                 "lint": {
@@ -48,7 +53,7 @@
                         "main": "projects/example/src/main.ts",
                         "polyfills": "projects/example/src/polyfills.ts",
                         "tsConfig": "projects/example/tsconfig.app.json",
-                        "aot": false,
+                        "aot": true,
                         "assets": [
                             "projects/example/src/favicon.ico",
                             "projects/example/src/assets"
@@ -71,7 +76,6 @@
                             "sourceMap": false,
                             "extractCss": true,
                             "namedChunks": false,
-                            "aot": true,
                             "extractLicenses": true,
                             "vendorChunk": false,
                             "buildOptimizer": true,
@@ -100,28 +104,12 @@
                             "browserTarget": "example:build:production"
                         }
                     }
-                },
-                "extract-i18n": {
-                    "builder": "@angular-devkit/build-angular:extract-i18n",
-                    "options": {
-                        "browserTarget": "example:build"
-                    }
-                },
-                "lint": {
-                    "builder": "@angular-devkit/build-angular:tslint",
-                    "options": {
-                        "tsConfig": [
-                            "projects/example/tsconfig.app.json",
-                            "projects/example/tsconfig.spec.json",
-                            "projects/example/e2e/tsconfig.json"
-                        ],
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
-                    }
                 }
             }
         }
     },
-    "defaultProject": "@netocny/ng-page-slider"
+    "defaultProject": "@netocny/ng-page-slider",
+    "cli": {
+        "analytics": false
+    }
 }

@@ -1,11 +1,13 @@
+[![CircleCI](https://circleci.com/gh/Eddman/ng-page-slider.svg?style=svg)](https://circleci.com/gh/Eddman/ng-page-slider)
+
 **Fork of [KeatonTech/Angular-2-Page-Slider](https://github.com/KeatonTech/Angular-2-Page-Slider).**
 ---
 
 **Mimicks the functionality of UIPageViewController in pure HTML for mobile web apps, using
-DOM recycling and CSS3 transitions for near-native performance. Built with Angular 8, and
+DOM recycling and CSS3 transitions for near-native performance. Built with Angular 9, and
 designed to work seamlessly in normal NG2 templates.**
 
-*Designed for Angular 8.2.0+*
+*Designed for Angular 9.0.0+*
 
 ### Live Demo
 http://samuel.netocny.com
@@ -107,39 +109,39 @@ $page_margin: 15px;
 
 # API
 
-## NgPageSliderComponent (ng-page-slider)
+## NgPageSliderComponent (`ng-page-slider`)
 Container component for pages. Handles touch events, resizing and animation.
 
 ### Input Properties
-* **page:** Current page number, zero-based index.
-	* Allows two-way data binding
-	* Must be a number 0 <= page < pageCount
-	* Defaults to 0
-* **transitionDuration:** In the absence of scrolling momentum, how long should a transition take?
-	* Expressed as an integer number of milliseconds >= 0
-	* Defaults to 250ms
-* **locked:** When true, page scrolling is disabled 
-	* Boolean, defaults to false
-* **showIndicator:** When true, includes a dot indicator at the bottom.
-	* Boolean, defaults to true
-* **overlayIndicator:** When true, renders indicator above the page content.
-	* Boolean, defaults to true
-* **enableOverscroll:** When true, user can scroll slightly past the first and last page.
-	* Boolean, defaults to true
-* **enableArrowKeys:** When true, the left and right arrow keys will cause page navigation.
-	* Boolean, defaults to true
-* **autoScrollInterval:** If provided the slider will auto-scroll until user interacts with it.
-	* Number of miliseconds before a next slide is shown
-	* Must be a number > 0 (excluding)
+- **`page`:** Current page number, zero-based index.
+	- Allows two-way data binding
+	- Must be a `number` (`0 <= page < pageCount`)
+	- Defaults to `0`
+- **`transitionDuration`:** In the absence of scrolling momentum, how long should a transition take?
+	- Expressed as an integer `number` of milliseconds `>= 0`
+	- Defaults to 250ms
+- **`locked`:** When true, page scrolling is disabled 
+	- `boolean`, defaults to `false`
+- **`showIndicator`:** When `true`, includes a dot indicator at the bottom.
+	- `boolean`, defaults to `true`
+- **`overlayIndicator`:** When `true`, renders indicator above the page content.
+	- `boolean`, defaults to `true`
+- **`enableOverscroll`:** When `true`, user can scroll slightly past the first and last page.
+	- `boolean`, defaults to `true`
+- **`enableArrowKeys`:** When `true`, the left and right arrow keys will cause page navigation.
+	- `boolean`, defaults to `true`
+- **`autoScrollInterval`:** If provided the slider will auto-scroll until user interacts with it.
+	- `number` of miliseconds before a next slide is shown
+	- Must be a `number` - `> 0` (excluding)
 
-## NgPagesRendererDirective (ngSliderPages)
+## NgPagesRendererDirective (`ngSliderPages`)
 Renders pages using DOM recycling, so only at most 3 exist on the DOM at any given time
-(previous, current, next). Modeled on ngFor, uses the exact same looping syntax.
+(previous, current, next). Modeled based on `ngFor`, uses the exact same looping syntax.
 
 ### Provided Loop Variables
 These variables are available inside of ngSliderPages, similar to ngFor loop items.
 
-* **index:** *number* Zero-based index of the current page.
-* **isFirst:** *boolean* True when the page is the first page.
-* **isLast:** *boolean* True when the page is the last page.
-* **isActive:** *boolean* True when the page is currently being viewed by the user.
+- **`index`:** `number` Zero-based index of the current page.
+- **`isFirst`:** `boolean` True when the page is the first page.
+- **`isLast`:** `boolean` True when the page is the last page.
+- **`isActive`:** `boolean` True when the page is currently being viewed by the user.
